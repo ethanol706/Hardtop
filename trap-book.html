@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NCERT Trap Book | NEET 2027 Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght=400;700;800;900&family=Quicksand:wght=500;600;700&family=Space+Mono:wght=400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--bg:#05070f;
+--card:#0b0f1c;
+--card2:#101524;
+--border:#1a2238;
+--text:#e8edf8;
+--muted:#5a6a8a;
+--purple:#a855f7;
+--cyan:#06b6d4;
+--gold:#f59e0b;
+--green:#10b981;
+--red:#ef4444;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+body{
+background:var(--bg);
+color:var(--text);
+font-family:'Quicksand',sans-serif;
+min-height:100vh;
+padding:20px 16px;
+overflow-x:hidden;
+}
+
+/* Background elements matching parent hub layout */
+.bgc{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+.orb{ position:absolute; border-radius:50%; filter:blur(100px); }
+.o1{ width:500px; height:500px; background:rgba(239,68,68,.05); top:-100px; left:-100px; }
+.o2{ width:400px; height:400px; background:rgba(168,85,247,.04); bottom:-100px; right:-100px; }
+.grid{
+position:fixed; inset:0; z-index:0;
+background-image: linear-gradient(rgba(168,85,247,.01) 1px,transparent 1px), linear-gradient(90deg,rgba(168,85,247,.01) 1px,transparent 1px);
+background-size:60px 60px; pointer-events:none;
+}
+
+.container{
+max-width:480px;
+width:100%;
+margin:0 auto;
+position:relative;
+z-index:1;
+}
+
+.header-nav{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:20px;
+background:var(--card);
+padding:12px 16px;
+border-radius:16px;
+border:1px solid var(--border);
+}
+.back-btn{
+color:var(--muted);
+text-decoration:none;
+font-weight:700;
+font-size:14px;
+transition:color 0.2s;
+}
+.back-btn:hover{ color:var(--text); }
+.header-title-text{ font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; color:var(--red); }
+
+/* Intro Banner */
+.intro-box{
+background:linear-gradient(135deg,#0a0518,#14050d);
+border:1px solid rgba(239,68,68,.2);
+border-radius:22px;
+padding:20px;
+text-align:center;
+margin-bottom:18px;
+}
+.intro-icon{ font-size:32px; margin-bottom:6px; }
+.intro-box h1{ font-family:'Nunito',sans-serif; font-weight:900; font-size:24px; margin-bottom:4px; color:#fff; }
+.intro-box p{ font-size:12px; color:var(--muted); line-height:1.5; }
+
+/* Custom Add Entry Form Container */
+.add-form{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:16px;
+margin-bottom:20px;
+}
+.form-title{ font-family:'Nunito',sans-serif; font-weight:800; font-size:14px; margin-bottom:12px; color:var(--cyan); display:flex; align-items:center; gap:6px;}
+.form-group { margin-bottom:10px; }
+.form-group label { display:block; font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:4px; letter-spacing:0.05em;}
+.form-control{
+width:100%; background:var(--card2); border:1px solid var(--border); border-radius:10px;
+padding:8px 12px; color:var(--text); font-family:inherit; font-size:12px;
+}
+.form-control:focus{ border-color:var(--purple); outline:none; }
+.row-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.submit-btn{
+width:100%; background:linear-gradient(135deg, var(--purple), var(--cyan)); border:none;
+border-radius:10px; padding:10px; color:#fff; font-weight:800; font-size:12px; cursor:pointer; margin-top:4px;
+}
+.submit-btn:active{ transform:scale(0.98); }
+
+/* Filter Tabs */
+.filters{
+display:flex;
+gap:6px;
+overflow-x:auto;
+padding-bottom:8px;
+margin-bottom:16px;
+scrollbar-width:none;
+}
+.filters::-webkit-scrollbar { display:none; }
+.filter-btn{
+background:var(--card);
+border:1px solid var(--border);
+color:var(--muted);
+padding:6px 14px;
+border-radius:20px;
+font-size:11px;
+font-weight:700;
+cursor:pointer;
+white-space:nowrap;
+transition:all 0.2s;
+}
+.filter-btn.active{
+background:rgba(239,68,68,.15);
+border-color:var(--red);
+color:#fff;
+}
+
+/* Trap Cards List */
+.traps-list{ display:grid; gap:14px; }
+.trap-card{
+background:var(--card);
+border:1px solid var(--border);
+border-left:4px solid var(--red);
+border-radius:16px;
+padding:16px;
+position:relative;
+}
+.trap-meta{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.trap-tag{
+font-size:9px; font-weight:800; padding:2px 8px; border-radius:6px; text-transform:uppercase;
+}
+.tag-line{ background:rgba(6,182,212,.1); color:var(--cyan); }
+.tag-exception{ background:rgba(245,158,11,.1); color:var(--gold); }
+.tag-ar{ background:rgba(168,85,247,.1); color:var(--purple); }
+.tag-statement{ background:rgba(239,68,68,.1); color:var(--red); }
+
+.trap-ch{ font-family:'Space Mono',monospace; font-size:9px; color:var(--muted); font-weight:700; }
+.trap-statement-text{ font-size:13px; font-weight:700; line-height:1.5; color:#fff; margin-bottom:10px; }
+
+.trap-warning-box{
+background:rgba(239,68,68,.04); border:1px dashed rgba(239,68,68,.25);
+border-radius:10px; padding:10px; margin-bottom:12px;
+}
+.warning-heading{ font-size:10px; font-weight:800; color:var(--red); text-transform:uppercase; margin-bottom:3px; display:flex; align-items:center; gap:4px; }
+.warning-body{ font-size:12px; color:#fca5a5; line-height:1.4; font-weight:500; }
+
+/* Hidden components for active recall elements */
+.reveal-wrapper{ text-align:center; }
+.reveal-action-btn{
+background:var(--card2); border:1px solid var(--border); color:var(--text);
+padding:6px 14px; font-size:11px; font-weight:700; border-radius:8px; cursor:pointer; width:100%; transition:all 0.15s;
+}
+.reveal-action-btn:hover{ border-color:var(--muted); }
+.truth-box{
+background:rgba(16,185,129,.05); border-left:3px solid var(--green);
+border-radius:0 10px 10px 0; padding:12px; margin-top:10px; text-align:left; display:none;
+}
+.truth-heading{ font-size:10px; font-weight:800; color:var(--green); text-transform:uppercase; margin-bottom:4px; }
+.truth-body{ font-size:12px; color:#a7f3d0; line-height:1.4; font-weight:500; }
+
+.delete-card-btn{
+position:absolute; top:14px; right:14px; background:none; border:none; color:var(--muted); font-size:12px; cursor:pointer; display:none;
+}
+.trap-card:hover .delete-card-btn{ display:block; }
+.delete-card-btn:hover{ color:var(--red); }
+</style>
+</head>
+<body>
+
+<div class="bgc">
+   <div class="orb o1"></div>
+   <div class="orb o2"></div>
+   <div class="grid"></div>
+</div>
+
+<div class="container">
+
+   <!-- Top Navigation header link back to hub main layout -->
+   <div class="header-nav">
+       <a href="index.html" class="back-btn">← Home Hub</a>
+       <div class="header-title-text">NCERT Trap Book</div>
+       <div style="width:50px"></div>
+   </div>
+
+   <!-- Intro box profile display -->
+   <div class="intro-box">
+       <div class="intro-icon">⚠️</div>
+       <h1>NCERT Trap Book</h1>
+       <p>Active revision bank built to catch linguistic modifications, logical anomalies, and extreme qualifiers across high-weightage Biology chapters.</p>
+   </div>
+
+   <!-- Live Data Inputs Engine Interface -->
+   <div class="add-form">
+       <div class="form-title"><span>➕</span> Log a New NCERT Trap</div>
+       
+       <div class="form-group">
+           <label>The Target Statement / Question Blueprint</label>
+           <input type="text" id="inStatement" class="form-control" placeholder="e.g., All vertebrates are chordates but...">
+       </div>
+       
+       <div class="form-group">
+           <label>NTA Trap Mechanism (Where students fail)</label>
+           <textarea id="inDanger" class="form-control" rows="2" placeholder="e.g., Changing 'synchronous' to 'asynchronous' or swapping words..."></textarea>
+       </div>
+
+       <div class="form-group">
+           <label>The NCERT Ground Truth & Verification Reference</label>
+           <textarea id="inTruth" class="form-control" rows="2" placeholder="e.g., True statement fact from NCERT page..."></textarea>
+       </div>
+
+       <div class="row-grid">
+           <div class="form-group">
+               <label>Category</label>
+               <select id="inCat" class="form-control">
+                   <option value="line">Confusing Line</option>
+                   <option value="exception">Exception</option>
+                   <option value="ar">Assertion / Reason</option>
+                   <option value="wrong">Wrong Statement</option>
+               </select>
+           </div>
+           <div class="form-group">
+               <label>Chapter Name</label>
+               <input type="text" id="inChapter" class="form-control" placeholder="e.g., Genetics">
+           </div>
+       </div>
+
+       <button class="submit-btn" onclick="saveCustomTrap()">Commit to Database</button>
+   </div>
+
+   <!-- Category Selector Tabs -->
+   <div class="filters">
+       <button class="filter-btn active" onclick="setFilter('all', this)">All Items</button>
+       <button class="filter-btn" onclick="setFilter('line', this)">Confusing Lines</button>
+       <button class="filter-btn" onclick="setFilter('exception', this)">Exceptions</button>
+       <button class="filter-btn" onclick="setFilter('ar', this)">Assertion & Reason</button>
+       <button class="filter-btn" onclick="setFilter('wrong', this)">Wrong Statements</button>
+   </div>
+
+   <!-- Output Dynamic Render Wrapper -->
+   <div class="traps-list" id="trapsContainer"></div>
+
+</div>
+
+<script>
+// MASTER NCERT BIOLOGY TRAP DATABASE — NISHANT'S S-TIER EDITION
+const initialTraps = [
+   // --- DIVERSITY IN THE LIVING WORLD ---
+   {
+       id: "b1",
+       category: "line",
+       chapter: "Living World",
+       statement: '"Growth and reproduction are mutually inclusive events in unicellular organisms like Bacteria, unicellular Algae or Amoeba."',
+       danger: "NTA applies this universally. They will statement-swap to say they are \'mutually exclusive for all living beings\'.",
+       truth: "For higher plants and animals, growth and reproduction are mutually EXCLUSIVE. For unicellular organisms, increasing cell number is both growth AND reproduction, making them inclusive."
+   },
+   {
+       id: "b2",
+       category: "line",
+       chapter: "Biological Classification",
+       statement: '"The cell walls of Fungi are composed of chitin and polysaccharides." vs Chemical composition structural filters.',
+       danger: "They often substitute \'chitin and peptidoglycan\' or claim fungal cell walls are structurally identical to plant cellulose blueprints.",
+       truth: "Fungal cell wall = Chitin (N-acetylglucosamine homopolymer) + Polysaccharides. No cellulose is tracked in true fungi structures."
+   },
+   {
+       id: "b3",
+       category: "wrong",
+       chapter: "Biological Classification",
+       statement: '"Chemosynthetic autotrophic bacteria oxidize various inorganic substances such as nitrates, nitrites and ammonia and use the released energy for their ATP production."',
+       danger: "NTA replaces \'inorganic\' with \'organic substances\', or claims they use solar radiation energies to drive ATP synthesis.",
+       truth: "They rely completely on chemical oxidation of INORGANIC compounds. They play an immense recycled role in nitrogen, phosphorus, iron, and sulphur cycles."
+   },
+   {
+       id: "b4",
+       category: "exception",
+       chapter: "Plant Kingdom",
+       statement: '"In Bryophytes, the dominant phase is gametophyte; in Pteridophytes, Gymnosperms, and Angiosperms, it is sporophyte."',
+       danger: "Assertion/Reason setups state that all land plants possess a dominant, long-lived, independent sporophytic system.",
+       truth: "Bryophytes are unique: their main plant body is a free-living haploid gametophyte. The sporophyte is physically dependent/attached to the gametophyte for nutrition."
+   },
+   {
+       id: "b5",
+       category: "line",
+       chapter: "Animal Kingdom",
+       statement: '"All chordates are not vertebrates, but all vertebrates are chordates."',
+       danger: "They systematically reverse this statement: \'All chordates are vertebrates, but all vertebrates are not chordates.\'",
+       truth: "Protochordates (Urochordata and Cephalochordata) retain a notochord but never develop a true bony or cartilaginous vertebral column layout."
+   },
+   {
+       id: "b6",
+       category: "exception",
+       chapter: "Animal Kingdom",
+       statement: '"All members of Class Cyclostomata are ectoparasites on some fishes, possess a sucking circular mouth without jaws, but lack scales and paired fins."',
+       danger: "They introduce \'possess scales and paired fins\' to break the primitive jawless fish absolute identification markers.",
+       truth: "Cyclostomes have completely smooth skin completely devoid of scales, and their body does not show any paired fins configurations."
+   },
+
+   // --- STRUCTURAL ORGANISATION ---
+   {
+       id: "b7",
+       category: "line",
+       chapter: "Morphology of Flowering Plants",
+       statement: '"In monocotyledonous seeds, the outer covering of endosperm separates the embryo by a proteinous layer called aleurone layer."',
+       danger: "They change \'proteinous\' to \'carbohydrate/lipid layer\' or claim it separates cotyledons from endosperms globally.",
+       truth: "The aleurone layer is explicitly proteinous. It is a vital layer that produces hydrolytic enzymes during structural germination."
+   },
+   {
+       id: "b8",
+       category: "line",
+       chapter: "Structural Organisation (Cockroach)",
+       statement: '"In cockroach, grinding of food particles is performed by the gizzard which has an outer layer of thick circular muscles and thick inner cuticle forming six highly chitinous plates called teeth."',
+       danger: "They flip \'outer circular muscles\' with \'inner cuticle\', or change the count to \'four\' or \'eight\' chitinous teeth.",
+       truth: "Muscles are OUTER (to contract and apply force); cuticle teeth are INNER (to physically crush food matrix). There are exactly 6 teeth."
+   },
+
+   // --- CELL: STRUCTURE AND FUNCTION ---
+   {
+       id: "b9",
+       category: "line",
+       chapter: "Cell: The Unit of Life",
+       statement: '"The cell wall of Algae is made of cellulose, galactans, mannans and minerals like calcium carbonate, while in plants it consists of cellulose, hemicellulose, pectins and proteins."',
+       danger: "A massive match-the-following trap. They swap plant components (pectin/hemicellulose) into the algal cell wall matrix description.",
+       truth: "Algal wall has NO pectin or hemicellulose. It specifically contains galactans, mannans, and calcium carbonate matrix lines."
+   },
+   {
+       id: "b10",
+       category: "line",
+       chapter: "Biomolecules",
+       statement: '"Inulin is a polymer of fructose." vs Protein hormone insulin configurations.',
+       danger: "Linguistic trap. Students read \'Inulin\' as \'Insulin\' due to exam pressure. They will state \'Inulin is a peptide hormone\'.",
+       truth: "Inulin is a storage carbohydrate (fructan polysaccharide) found in plants like Dahlia. Insulin is a 51-amino-acid peptide hormone."
+   },
+   {
+       id: "b11",
+       category: "wrong",
+       chapter: "Biomolecules",
+       statement: '"Cellulose is a homopolymer of glucose, while starch and glycogen are also glucose homopolymers but with different branching profiles."',
+       danger: "They claim cellulose or starch are heteropolymers composed of multiple distinct monosaccharide isomer species.",
+       truth: "All three (Cellulose, Starch, Glycogen) are absolute HOMOPOLYMERS made exclusively of glucose units. Heteropolymers contain multiple monomer variations."
+   },
+   {
+       id: "b12",
+       category: "line",
+       chapter: "Cell Cycle & Division",
+       statement: '"During S phase, DNA replication begins in the nucleus, and the centriole duplicates in the cytoplasm."',
+       danger: "Location-swap trap: \'DNA duplicates in cytoplasm, while centriole divides in the nucleus\' or changing the phase to G2 phase.",
+       truth: "DNA is nuclear material (Nucleus). Centriole is a cytoplasmic organelle (Cytoplasm). Both duplicate simultaneously during S Phase."
+   },
+   {
+       id: "b13",
+       category: "line",
+       chapter: "Cell Cycle & Division",
+       statement: '"Interkinesis is a short-lived stage between Meiosis I and Meiosis II where there is no replication of DNA."',
+       danger: "They state that \'Interkinesis involves a full round of DNA synthesis to prepare chromosomes for Meiosis II calculations.\'",
+       truth: "DNA replication NEVER occurs during interkinesis. If DNA duplicated again, Meiosis would fail to reduce chromosome ploidy levels."
+   },
+
+   // --- PLANT PHYSIOLOGY ---
+   {
+       id: "b14",
+       category: "ar",
+       chapter: "Photosynthesis in Higher Plants",
+       statement: "Assertion: C4 plants are more efficient than C3 plants.<br>Reason: Photorespiration is a highly productive process generating rich energy currencies in C3 pathways.",
+       danger: "Students often mistake photorespiration as a useful process instead of a highly wasteful energy-draining loop.",
+       truth: "The Reason is completely FALSE. Photorespiration does NOT produce ATP or NADPH; it actually wastes fixed carbon by releasing carbon dioxide."
+   },
+   {
+       id: "b15",
+       category: "exception",
+       chapter: "Respiration in Plants",
+       statement: '"Pure proteins or fats are never used as respiratory substrates."',
+       danger: "NTA plays on the extreme absolute word \'never\'. Students mark this statement false, assuming fats enter pathways directly.",
+       truth: "The statement is completely TRUE. Pure fats/proteins must be converted to intermediate fatty acids, glycerol, or amino acids first before entering respiratory channels."
+   },
+   {
+       id: "b16",
+       category: "line",
+       chapter: "Plant Growth & Development",
+       statement: '"Auxin was isolated by F.W. Went from tips of coleoptiles of oat seedlings, whereas Kinetin was discovered from autoclaved herring sperm DNA."',
+       danger: "They mix scientists and sources: claiming Went isolated gibberellins, or that kinetin occurs naturally in coconut milk systems.",
+       truth: "Kinetin does NOT occur naturally in plants; it was discovered from autoclaved fish sperm DNA. Zeatin is the natural cytokinin."
+   },
+
+   // --- HUMAN PHYSIOLOGY ---
+   {
+       id: "b17",
+       category: "line",
+       chapter: "Breathing & Exchange of Gases",
+       statement: '"About 70 per cent of carbon dioxide is transported as bicarbonate, 20-25 per cent by RBCs as carbamino-hemoglobin, and 7 per cent in dissolved state through plasma."',
+       danger: "They shuffle the numbers: \'70% dissolved in plasma, 7% as bicarbonate\' to invert internal circulatory tracking logic.",
+       truth: "70% = Bicarbonate ions (bulk mode); 20-25% = bound to hemoglobin (carbamino); 7% = dissolved directly inside fluid plasma lines."
+   },
+   {
+       id: "b18",
+       category: "line",
+       chapter: "Body Fluids & Circulation",
+       statement: '"The SAN can generate the maximum number of action potentials (70-75 min⁻¹) and is responsible for initiating and maintaining the rhythmic contractile activity of the heart."',
+       danger: "They assign this pacemaker capability to the AVN (Atrioventricular Node) or Purkinje fibers in comparative question sets.",
+       truth: "Sino-atrial Node (SAN) has the highest intrinsic rate of depolarization, making it the supreme master pacemaker of human cardiac systems."
+   },
+   {
+       id: "b19",
+       category: "wrong",
+       chapter: "Excretory Products & Elimination",
+       statement: '"The descending limb of loop of Henle is permeable to water but almost impermeable to electrolytes, while the ascending limb is impermeable to water but allows transport of electrolytes."',
+        danger: "The absolute classic multi-statement swap. They invert the permeability behaviors of the ascending and descending limbs perfectly.",
+        truth: "Descending limb = Conserves electrolytes, lets water escape (concentrates filtrate). Ascending limb = Holds water, pumps out electrolytes (dilutes filtrate)."
+    },
+    {
+        id: "b20",
+        category: "line",
+        chapter: "Chemical Coordination & Integration",
+        statement: '"Exophthalmic goitre is a form of hyperthyroidism characterized by enlargement of thyroid gland, protrusion of eyeballs, increased BMR and weight loss."',
+        danger: "They change \'hyperthyroidism\' to \'hypothyroidism\' because students associate all goitre structures with iodine deficiencies.",
+        truth: "Exophthalmic goitre (Graves\' disease) is an autoimmune disease causing HYPER-secretion (overactivity) of thyroid hormones."
+    },
+    {
+        id: "b21",
+        category: "line",
+        chapter: "Human Reproduction",
+        statement: '"During cleavage divisions in the human zygote, the overall size of the embryo remains completely static while cell numbers increase."',
+        danger: "They write that the embryo grows significantly in volume during cleavage, confusing rapid cell division with somatic tissue growth phases.",
+        truth: "Because the embryo remains confined inside the tough, non-expanding Zona Pellucida shell, cell numbers increase but individual cell volume decreases."
+    },
+    {
+        id: "b22",
+        category: "wrong",
+        chapter: "Human Reproduction",
+        statement: '"The human placenta secretes hCG, hPL, estrogens, and progesterone, but Relaxin is secreted by the ovary later in pregnancy cycles."',
+        danger: "They add \'Relaxin\' to the list of primary molecules manufactured directly by human placenta structures.",
+        truth: "Relaxin is secreted by the Corpus Luteum of the OVARY, not the placenta, though both are involved in late gestational timelines."
+    },
+    {
+        id: "b23",
+        category: "line",
+        chapter: "Principles of Inheritance",
+        statement: '"Henking (1891) traced a specific nuclear structure through spermatogenesis in insects and named it the X-body."',
+        danger: "They state \'Henking discovered the X-chromosome directly\' or identified the \'Y-chromosome pattern matching mechanism\'.",
+        truth: "Henking could not identify its chromosomal nature due to primitive optics; he simply called it an \'X-body\'. Later work proved it was a chromosome."
+    },
+    {
+        id: "b24",
+        category: "ar",
+        chapter: "Molecular Basis of Inheritance",
+        statement: "Assertion: Both strands of DNA are not copied during transcription processes.<br>Reason: If both strands acted as templates, they would produce two different RNA molecules with conflicting protein codes.",
+        danger: "Students miss the logic of why double-stranded RNA prevents translation processes via antisense interference patterns.",
+        truth: "Both Assertion and Reason are completely TRUE, and Reason correctly explains why only one selective strand enters active transcription paths."
+    },
+    {
+        id: "b25",
+        category: "line",
+        chapter: "Evolution",
+        statement: '"Tendrils of Bougainvillea and spines of Cucurbita represent homology, while flippers of penguins and dolphins represent analogy."',
+        danger: "They invert the examples: calling Bougainvillea spines an analog structure or swapping homeostatic driving forces.",
+        truth: "Bougainvillea (Thorns) and Cucurbita (Tendrils) share identical axillary bud origins = HOMOLOGY. Flippers are adaptations to a shared habitat = ANALOGY."
+    },
+    {
+        id: "b26",
+        category: "line",
+        chapter: "Biotech: Principles",
+        statement: '"The first restriction endonuclease discovered was Hind II, which cuts DNA molecules at a specific sequence of six base pairs."',
+        danger: "They substitute \'EcoRI\' as the first discovered enzyme because it is the most heavily discussed example in text diagrams.",
+        truth: "EcoRI is famous, but Hind II was the absolute first restriction endonuclease isolated and verified to have sequence-specific cleavage actions."
+    },
+    {
+        id: "b27",
+        category: "wrong",
+        chapter: "Biotech: Applications",
+        statement: '"Bt toxin proteins exist as inactive protoxins in the bacterium but become active due to the alkaline pH of the insect gut channel."',
+        danger: "They change \'alkaline pH\' to \'acidic pH\' or claim the toxin kills the host bacterium cells via localized lysosome leaking.",
+        truth: "The bacterial gut has an ALKALINE pH which dissolves the toxin crystals. Acidic environments (like human stomachs) render Bt toxins completely harmless."
+    },
+    {
+        id: "b28",
+        category: "exception",
+        chapter: "Ecosystem",
+        statement: '"The pyramid of biomass in sea is generally inverted because the biomass of fishes far exceeds that of phytoplankton."',
+        danger: "They statement-assert that all biomass pyramids are upright without exception across biosphere zones.",
+        truth: "Sea biomass is a striking exception. Because phytoplankton have high turnover rates but low standing crop weight, the consumer fish biomass heavily outweighs them at any given moment."
+    },
+    {
+        id: "b29",
+        category: "line",
+        chapter: "Biodiversity & Conservation",
+        statement: '"According to the Robert May global estimates, the global species diversity is placed at about 7 million species."',
+        danger: "They replace \'Robert May\' with \'IUCN baseline data parameters\' or state that 7 million species have already been discovered and named.",
+        truth: "IUCN lists around 1.5 million known species. 7 million is Robert May\'s highly accepted statistical *estimate* for total species existence."
+    },
+    {
+        id: "b30",
+        category: "line",
+        chapter: "Biodiversity & Conservation",
+        statement: '"Sacred groves are found in Khasi and Jaintia Hills in Meghalaya, Aravalli Hills of Rajasthan, Western Ghat regions of Karnataka and Maharashtra and Sarguja, Chanda and Bastar areas of Madhya Pradesh."',
+        danger: "A notorious target for location matching. They will claim Khasi hills are in Assam or Western Ghats are confined to Kerala profiles.",
+        truth: "You must memorize these pairings exactly: Khasi/Jaintia = Meghalaya; Aravalli = Rajasthan; Sarguja/Chanda/Bastar = MP. NTA loves asking this directly."
+    }
+];
+
+let database = [];
+
+function initData() {
+    const localData = localStorage.getItem('neet_trap_book_entries');
+    if (localData) {
+        database = JSON.parse(localData);
+        initialTraps.forEach(initItem => {
+            if (!database.some(dbItem => dbItem.id === initItem.id)) {
+                database.push(initItem);
+            }
+        });
+        localStorage.setItem('neet_trap_book_entries', JSON.stringify(database));
+    } else {
+        database = [...initialTraps];
+        localStorage.setItem('neet_trap_book_entries', JSON.stringify(database));
+    }
+    renderTraps('all');
+}
+
+let currentFilterMode = 'all';
+
+function renderTraps(filter) {
+    currentFilterMode = filter;
+    const container = document.getElementById('trapsContainer');
+    container.innerHTML = '';
+
+    database.forEach(item => {
+        if (filter !== 'all' && item.category !== filter) return;
+
+        let tagClass = 'tag-line';
+        let tagLabel = 'Confusing Line';
+        if(item.category === 'exception') { tagClass = 'tag-exception'; tagLabel = 'Exception'; }
+        if(item.category === 'ar') { tagClass = 'tag-ar'; tagLabel = 'Assertion / Reason'; }
+        if(item.category === 'wrong') { tagClass = 'tag-statement'; tagLabel = 'Wrong Statement'; }
+
+        const isCustom = !item.id.toString().startsWith('b');
+
+        const card = document.createElement('div');
+        card.className = 'trap-card';
+        card.innerHTML = `
+            ${isCustom ? `<button class="delete-card-btn" onclick="deleteTrap('${item.id}')">&times;</button>` : ''}
+            <div class="trap-meta">
+                <span class="trap-tag ${tagClass}">${tagLabel}</span>
+                <span class="trap-ch">${item.chapter}</span>
+            </div>
+            <div class="trap-statement-text">${item.statement}</div>
+            
+            <div class="trap-warning-box">
+                <div class="warning-heading">🚨 The NTA Trap Mechanism</div>
+                <div class="warning-body">${item.danger}</div>
+            </div>
+
+            <div class="reveal-wrapper">
+                <button class="reveal-action-btn" onclick="toggleActiveRecall(this)">Reveal NCERT Ground Truth</button>
+                <div class="truth-box">
+                    <div class="truth-heading">🍀 Ground Truth Verified</div>
+                    <div class="truth-body">${item.truth}</div>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    if(container.innerHTML === '') {
+        container.innerHTML = `<div style="text-align:center; color:var(--muted); font-size:12px; padding:40px 0;">No traps tracked here yet. Add a new find above!</div>`;
+    }
+}
+
+function setFilter(category, element) {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+    renderTraps(category);
+}
+
+function toggleActiveRecall(btn) {
+    const truthBox = btn.nextElementSibling;
+    if (truthBox.style.display === "block") {
+        truthBox.style.display = "none";
+        btn.innerText = "Reveal NCERT Ground Truth";
+    } else {
+        truthBox.style.display = "block";
+        btn.innerText = "Hide Ground Truth";
+    }
+}
+
+function saveCustomTrap() {
+    const statement = document.getElementById('inStatement').value.trim();
+    const danger = document.getElementById('inDanger').value.trim();
+    const truth = document.getElementById('inTruth').value.trim();
+    const category = document.getElementById('inCat').value;
+    const chapter = document.getElementById('inChapter').value.trim() || 'General';
+
+    if (!statement || !danger || !truth) {
+        alert('Please fill out the Statement, Trap Mechanism, and Ground Truth fields first!');
+        return;
+    }
+
+    const newEntry = {
+        id: 'c_' + Date.now(),
+        category: category,
+        chapter: chapter,
+        statement: statement,
+        danger: danger,
+        truth: truth
+    };
+
+    database.unshift(newEntry);
+    localStorage.setItem('neet_trap_book_entries', JSON.stringify(database));
+
+    document.getElementById('inStatement').value = '';
+    document.getElementById('inDanger').value = '';
+    document.getElementById('inTruth').value = '';
+    document.getElementById('inChapter').value = '';
+
+    renderTraps(currentFilterMode);
+}
+
+function deleteTrap(id) {
+    if(confirm("Remove this entry from your active revision logs?")) {
+        database = database.filter(item => item.id !== id);
+        localStorage.setItem('neet_trap_book_entries', JSON.stringify(database));
+        renderTraps(currentFilterMode);
+    }
+}
+
+initData();
+</script>
+</body>
+</html>
