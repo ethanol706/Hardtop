@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NCERT Trap Book | NEET 2027 Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght=400;700;800;900&family=Quicksand:wght=500;600;700&family=Space+Mono:wght=400;700&display=swap" rel="stylesheet">
+
+<style>
+:root{
+--bg:#05070f;
+--card:#0b0f1c;
+--card2:#101524;
+--border:#1a2238;
+--text:#e8edf8;
+--muted:#5a6a8a;
+--purple:#a855f7;
+--cyan:#06b6d4;
+--gold:#f59e0b;
+--green:#10b981;
+--red:#ef4444;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+body{
+background:var(--bg);
+color:var(--text);
+font-family:'Quicksand',sans-serif;
+min-height:100vh;
+padding:20px 16px;
+overflow-x:hidden;
+}
+
+/* Background elements matching parent hub layout */
+.bgc{ position:fixed; inset:0; z-index:0; pointer-events:none; }
+.orb{ position:absolute; border-radius:50%; filter:blur(100px); }
+.o1{ width:500px; height:500px; background:rgba(239,68,68,.05); top:-100px; left:-100px; }
+.o2{ width:400px; height:400px; background:rgba(168,85,247,.04); bottom:-100px; right:-100px; }
+.grid{
+position:fixed; inset:0; z-index:0;
+background-image: linear-gradient(rgba(168,85,247,.01) 1px,transparent 1px), linear-gradient(90deg,rgba(168,85,247,.01) 1px,transparent 1px);
+background-size:60px 60px; pointer-events:none;
+}
+
+.container{
+max-width:480px;
+width:100%;
+margin:0 auto;
+position:relative;
+z-index:1;
+}
+
+.header-nav{
+display:flex;
+align-items:center;
+justify-content:space-between;
+margin-bottom:20px;
+background:var(--card);
+padding:12px 16px;
+border-radius:16px;
+border:1px solid var(--border);
+}
+.back-btn{
+color:var(--muted);
+text-decoration:none;
+font-weight:700;
+font-size:14px;
+transition:color 0.2s;
+}
+.back-btn:hover{ color:var(--text); }
+.header-title-text{ font-family:'Nunito',sans-serif; font-weight:900; font-size:16px; color:var(--red); }
+
+/* Intro Banner */
+.intro-box{
+background:linear-gradient(135deg,#0a0518,#14050d);
+border:1px solid rgba(239,68,68,.2);
+border-radius:22px;
+padding:20px;
+text-align:center;
+margin-bottom:18px;
+}
+.intro-icon{ font-size:32px; margin-bottom:6px; }
+.intro-box h1{ font-family:'Nunito',sans-serif; font-weight:900; font-size:24px; margin-bottom:4px; color:#fff; }
+.intro-box p{ font-size:12px; color:var(--muted); line-height:1.5; }
+
+/* Filter Tabs */
+.filters{
+display:flex;
+gap:6px;
+overflow-x:auto;
+padding-bottom:8px;
+margin-bottom:16px;
+scrollbar-width:none;
+}
+.filters::-webkit-scrollbar { display:none; }
+.filter-btn{
+background:var(--card);
+border:1px solid var(--border);
+color:var(--muted);
+padding:6px 14px;
+border-radius:20px;
+font-size:11px;
+font-weight:700;
+cursor:pointer;
+white-space:nowrap;
+transition:all 0.2s;
+}
+.filter-btn.active{
+background:rgba(239,68,68,.15);
+border-color:var(--red);
+color:#fff;
+}
+
+/* Custom Add Entry Form Container */
+.add-form{
+background:var(--card);
+border:1px solid var(--border);
+border-radius:18px;
+padding:16px;
+margin-bottom:20px;
+}
+.form-title{ font-family:'Nunito',sans-serif; font-weight:800; font-size:14px; margin-bottom:12px; color:var(--cyan); display:flex; align-items:center; gap:6px;}
+.form-group { margin-bottom:10px; }
+.form-group label { display:block; font-size:10px; font-weight:700; color:var(--muted); text-transform:uppercase; margin-bottom:4px; letter-spacing:0.05em;}
+.form-control{
+width:100%; background:var(--card2); border:1px solid var(--border); border-radius:10px;
+padding:8px 12px; color:var(--text); font-family:inherit; font-size:12px;
+}
+.form-control:focus{ border-color:var(--purple); outline:none; }
+.row-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.submit-btn{
+width:100%; background:linear-gradient(135deg, var(--purple), var(--cyan)); border:none;
+border-radius:10px; padding:10px; color:#fff; font-weight:800; font-size:12px; cursor:pointer; margin-top:4px;
+}
+.submit-btn:active{ transform:scale(0.98); }
+
+/* Trap Cards List */
+.traps-list{ display:grid; gap:14px; }
+.trap-card{
+background:var(--card);
+border:1px solid var(--border);
+border-left:4px solid var(--red);
+border-radius:16px;
+padding:16px;
+position:relative;
+}
+.trap-meta{ display:flex; justify-content:space-between; align-items:center; margin-bottom:10px; }
+.trap-tag{
+font-size:9px; font-weight:800; padding:2px 8px; border-radius:6px; text-transform:uppercase;
+}
+.tag-line{ background:rgba(6,182,212,.1); color:var(--cyan); }
+.tag-exception{ background:rgba(245,158,11,.1); color:var(--gold); }
+.tag-ar{ background:rgba(168,85,247,.1); color:var(--purple); }
+.tag-statement{ background:rgba(239,68,68,.1); color:var(--red); }
+
+.trap-ch{ font-family:'Space Mono',monospace; font-size:9px; color:var(--muted); font-weight:700; }
+.trap-statement-text{ font-size:13px; font-weight:700; line-height:1.5; color:#fff; margin-bottom:10px; }
+
+.trap-warning-box{
+background:rgba(239,68,68,.04); border:1px dashed rgba(239,68,68,.25);
+border-radius:10px; padding:10px; margin-bottom:12px;
+}
+.warning-heading{ font-size:10px; font-weight:800; color:var(--red); text-transform:uppercase; margin-bottom:3px; display:flex; align-items:center; gap:4px; }
+.warning-body{ font-size:12px; color:#fca5a5; line-height:1.4; font-weight:500; }
+
+/* Hidden components for active recall elements */
+.reveal-wrapper{ text-align:center; }
+.reveal-action-btn{
+background:var(--card2); border:1px solid var(--border); color:var(--text);
+padding:6px 14px; font-size:11px; font-weight:700; border-radius:8px; cursor:pointer; width:100%; transition:all 0.15s;
+}
+.reveal-action-btn:hover{ border-color:var(--muted); }
+.truth-box{
+background:rgba(16,185,129,.05); border-left:3px solid var(--green);
+border-radius:0 10px 10px 0; padding:12px; margin-top:10px; text-align:left; display:none;
+}
+.truth-heading{ font-size:10px; font-weight:800; color:var(--green); text-transform:uppercase; margin-bottom:4px; }
+.truth-body{ font-size:12px; color:#a7f3d0; line-height:1.4; font-weight:500; }
+
+.delete-card-btn{
+position:absolute; top:14px; right:14px; background:none; border:none; color:var(--muted); font-size:12px; cursor:pointer; display:none;
+}
+.trap-card:hover .delete-card-btn{ display:block; }
+.delete-card-btn:hover{ color:var(--red); }
+</style>
+</head>
+<body>
+
+<div class="bgc">
+    <div class="orb o1"></div>
+    <div class="orb o2"></div>
+    <div class="grid"></div>
+</div>
+
+<div class="container">
+
+    <!-- Top Navigation header link back to hub main layout -->
+    <div class="header-nav">
+        <a href="index.html" class="back-btn">← Home Hub</a>
+        <div class="header-title-text">NCERT Trap Book</div>
+        <div style="width:50px"></div>
+    </div>
+
+    <!-- Intro box profile display -->
+    <div class="intro-box">
+        <div class="intro-icon">⚠️</div>
+        <h1>NCERT Trap Book</h1>
+        <p>Active revision bank built to catch linguistic modifications, logical anomalies, and extreme qualifiers across high-weightage Biology chapters.</p>
+    </div>
+
+    <!-- Live Data Inputs Engine Interface -->
+    <div class="add-form">
+        <div class="form-title"><span>➕</span> Log a New NCERT Trap</div>
+        
+        <div class="form-group">
+            <label>The Target Statement / Question Blueprint</label>
+            <input type="text" id="inStatement" class="form-control" placeholder="e.g., All vertebrates are chordates but...">
+        </div>
+        
+        <div class="form-group">
+            <label>NTA Trap Mechanism (Where students fail)</label>
+            <textarea id="inDanger" class="form-control" rows="2" placeholder="e.g., Changing 'synchronous' to 'asynchronous' or swapping words..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <label>The NCERT Ground Truth & Verification Reference</label>
+            <textarea id="inTruth" class="form-control" rows="2" placeholder="e.g., True statement fact from NCERT page..."></textarea>
+        </div>
+
+        <div class="row-grid">
+            <div class="form-group">
+                <label>Category</label>
+                <select id="inCat" class="form-control">
+                    <option value="line">Confusing Line</option>
+                    <option value="exception">Exception</option>
+                    <option value="ar">Assertion / Reason</option>
+                    <option value="wrong">Wrong Statement</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Chapter Name</label>
+                <input type="text" id="inChapter" class="form-control" placeholder="e.g., Genetics">
+            </div>
+        </div>
+
+        <button class="submit-btn" onclick="saveCustomTrap()">Commit to Database</button>
+    </div>
+
+    <!-- Category Selector Tabs -->
+    <div class="filters">
+        <button class="filter-btn active" onclick="setFilter('all', this)">All Items</button>
+        <button class="filter-btn" onclick="setFilter('line', this)">Confusing Lines</button>
+        <button class="filter-btn" onclick="setFilter('exception', this)">Exceptions</button>
+        <button class="filter-btn" onclick="setFilter('ar', this)">Assertion & Reason</button>
+        <button class="filter-btn" onclick="setFilter('wrong', this)">Wrong Statements</button>
+    </div>
+
+    <!-- Output Dynamic Render Wrapper -->
+    <div class="traps-list" id="trapsContainer"></div>
+
+</div>
+
+<script>
+// Built-in foundational data points curated for the user's high-yield review setup
+const initialTraps = [
+    {
+        id: "b1",
+        category: "line",
+        chapter: "Human Reproduction",
+        statement: '"The reproductive cycles in female primates is called menstrual cycle..." vs Non-primates.',
+        danger: "NTA shifts the taxonomy group context. They replace 'primates' with 'non-primates' or alter animals like dogs/cows into menstrual cycle categories instead of oestrus cycle structures.",
+        truth: "Menstrual cycle occurs strictly in Primates (monkeys, apes, and human beings). Oestrus cycle happens in non-primate mammals like cows, sheep, rats, deers, dogs, tigers, etc."
+    },
+    {
+        id: "b2",
+        category: "exception",
+        chapter: "Animal Kingdom",
+        statement: '"All vertebrates are chordates, but all chordates are not vertebrates."',
+        danger: "A classic blueprint logic swap. Question options frequently replace the terms to trick your mind under exam conditions: 'All chordates are vertebrates, but all vertebrates are not chordates' (False!).",
+        truth: "Chordates have a notochord. In Vertebrates, this notochord is replaced by a bony or cartilaginous vertebral column in adults. Hence protochordates are chordates but NOT vertebrates."
+    },
+    {
+        id: "b3",
+        category: "line",
+        chapter: "Genetics (MoBI)",
+        statement: '"The process of replication and transcription are bounded by complementarity rules, whereas translation is not."',
+        danger: "Assertion/Reason setups often state that Translation also follows identical base pair binding parameters directly matching template synthesis strings.",
+        truth: "Translation involves transfer of genetic information from a polymer of nucleotides to an amino acid polymer. There is no structural complementarity between amino acids and nucleotides."
+    },
+    {
+        id: "b4",
+        category: "ar",
+        chapter: "Plant Physio (Respiration)",
+        statement: "Assertion: Pure proteins or fats are never used as respiratory substrates.<br>Reason: They must be converted to organic acids first before entering pathway channels.",
+        danger: "The word 'never' in the assertion statement creates hesitation. You might assume it's false because fats are oxidized widely during stress intervals.",
+        truth: "Assertion is TRUE. Pure proteins or fats are never utilized directly; they are always broken down into simpler compounds (fatty acids/glycerol or amino acids) before processing."
+    },
+    {
+        id: "b5",
+        category: "wrong",
+        chapter: "Ecology (Organisms & Pop)",
+        statement: '"Human placenta secretes human chorionic gonadotropin, progesterone, and estrogens synchronously throughout life cycle timelines."',
+        danger: "NTA introduces subtle timeline inaccuracies by changing temporary endocrine structures into absolute permanent configurations.",
+        truth: "Placenta is a temporary structural endocrine matrix that only develops and synthesizes these compounds explicitly during corporate pregnancy cycles."
+    }
+];
+
+let database = [];
+
+// Initialize local database storage configurations securely
+function initData() {
+    const localData = localStorage.getItem('neet_trap_book_entries');
+    if (localData) {
+        database = JSON.parse(localData);
+    } else {
+        database = [...initialTraps];
+        localStorage.setItem('neet_trap_book_entries', JSON.stringify(database));
+    }
+    renderTraps('all');
+}
+
+// Global variable tracking currently selected filter mode state
+let currentFilterMode = 'all';
+
+function renderTraps(filter) {
+    currentFilterMode = filter;
+    const container = document.getElementById('trapsContainer');
+    container.innerHTML = '';
+
+    database.forEach(item => {
+        if (filter !== 'all' && item.category !== filter) return;
+
+        let tagClass = 'tag-line';
+        let tagLabel = 'Confusing Line';
+        if(item.category === 'exception') { tagClass = 'tag-exception'; tagLabel = 'Exception'; }
+        if(item.category === 'ar') { tagClass = 'tag-ar'; tagLabel = 'Assertion / Reason'; }
+        if(item.category === 'wrong') { tagClass = 'tag-statement'; tagLabel = 'Wrong Statement'; }
+
+        // Determine if this is a built-in item vs user-created item to allow delete access controls
+        const isCustom = !item.id.toString().startsWith('b');
+
+        const card = document.createElement('div');
+        card.className = 'trap-card';
+        card.innerHTML = `
+            ${isCustom ? `<button class="delete-card-btn" onclick="deleteTrap('${item.id}')">✕</button>` : ''}
+            <div class="trap-meta">
+                <span class="trap-tag ${tagClass}">${tagLabel}</span>
+                <span class="trap-ch">${item.chapter}</span>
+            </div>
+            <div class="trap-statement-text">${item.statement}</div>
+            
+            <div class="trap-warning-box">
+                <div class="warning-heading">🚨 The NTA Trap Mechanism</div>
+                <div class="warning-body">${item.danger}</div>
+            </div>
+
+            <div class="reveal-wrapper">
+                <button class="reveal-action-btn" onclick="toggleActiveRecall(this)">Reveal NCERT Ground Truth</button>
+                <div class="truth-box">
+                    <div class="truth-heading">🍀 Ground Truth Verified</div>
+                    <div class="truth-body">${item.truth}</div>
+                </div>
+            </div>
+        `;
+        container.appendChild(card);
+    });
+
+    if(container.innerHTML === '') {
+        container.innerHTML = `<div style="text-align:center; color:var(--muted); font-size:12px; padding:40px 0;">No traps tracked here yet. Add a new find above!</div>`;
+    }
+}
+
+// Filter Tab Trigger logic sets styling classes gracefully
+function setFilter(category, element) {
+    const buttons = document.querySelectorAll('.filter-btn');
+    buttons.forEach(btn => btn.classList.remove('active'));
+    element.classList.add('active');
+    renderTraps(category);
+}
+
+// Interactive Toggle logic executing active recall hiding strategies
+function toggleActiveRecall(btn) {
+    const truthBox = btn.nextElementSibling;
+    if (truthBox.style.display === "block") {
+        truthBox.style.display = "none";
+        btn.innerText = "Reveal NCERT Ground Truth";
+    } else {
+        truthBox.style.display = "block";
+        btn.innerText = "Hide Ground Truth";
+    }
+}
+
+// Processing interface capturing input elements securely
+function saveCustomTrap() {
+    const statement = document.getElementById('inStatement').value.trim();
+    const danger = document.getElementById('inDanger').value.trim();
+    const truth = document.getElementById('inTruth').value.trim();
+    const category = document.getElementById('inCat').value;
+    const chapter = document.getElementById('inChapter').value.trim() || 'General';
+
+    if (!statement || !danger || !truth) {
+        alert('Please fill out the Statement, Trap Mechanism, and Ground Truth fields first!');
+        return;
+    }
+
+    const newEntry = {
+        id: 'c_' + Date.now(),
+        category: category,
+        chapter: chapter,
+        statement: statement,
+        danger: danger,
+        truth: truth
+    };
+
+    database.unshift(newEntry);
+    localStorage.setItem('neet_trap_book_entries', JSON.stringify(database));
+
+    // Clear input values
+    document.getElementById('inStatement').value = '';
+    document.getElementById('inDanger').value = '';
+    document.getElementById('inTruth').value = '';
+    document.getElementById('inChapter').value = '';
+
+    renderTraps(currentFilterMode);
+}
+
+// Delete functions managing user custom logged items safely
+function deleteTrap(id) {
+    if(confirm("Remove this entry from your active revision logs?")) {
+        database = database.filter(item => item.id !== id);
+        localStorage.setItem('neet_trap_book_entries', JSON.stringify(database));
+        renderTraps(currentFilterMode);
+    }
+}
+
+// Fire runtime script processing initialization routines
+initData();
+</script>
+</body>
+</html>
