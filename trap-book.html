@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NCERT Trap Book — NEET 2027</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800;900&family=Quicksand:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root{
+--bg:#05070f;--card:#0b0f1c;--card2:#101524;--border:#1a2238;
+--text:#e8edf8;--muted:#5a6a8a;--faint:#1e2840;
+--purple:#a855f7;--cyan:#06b6d4;--pink:#ec4899;--gold:#f59e0b;
+--green:#10b981;--orange:#f97316;--blue:#3b82f6;--red:#ef4444;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Quicksand',sans-serif;min-height:100vh;overflow-x:hidden;}
+.bgc{position:fixed;inset:0;z-index:0;pointer-events:none;}
+.orb{position:absolute;border-radius:50%;filter:blur(100px);animation:float 10s ease-in-out infinite alternate;}
+.o1{width:600px;height:600px;background:rgba(239,68,68,.06);top:-150px;left:-150px;}
+.o2{width:400px;height:400px;background:rgba(245,158,11,.04);bottom:-100px;right:-100px;animation-delay:3s;}
+.o3{width:250px;height:250px;background:rgba(168,85,247,.05);top:40%;left:40%;animation-delay:5s;}
+@keyframes float{from{transform:translate(0,0) scale(1);}to{transform:translate(40px,30px) scale(1.15);}}
+.grid{position:fixed;inset:0;background-image:linear-gradient(rgba(239,68,68,.015) 1px,transparent 1px),linear-gradient(90deg,rgba(239,68,68,.015) 1px,transparent 1px);background-size:60px 60px;pointer-events:none;}
+
+.page{max-width:520px;width:100%;margin:0 auto;padding:24px 16px 64px;position:relative;z-index:1;}
+
+/* Top bar */
+.top-bar{display:flex;align-items:center;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+.back-btn{background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.25);border-radius:10px;padding:7px 13px;color:var(--red);font-family:'Nunito',sans-serif;font-size:13px;font-weight:800;text-decoration:none;transition:transform .15s;}
+.back-btn:active{transform:scale(.95);}
+.page-title{font-family:'Nunito',sans-serif;font-size:19px;font-weight:900;background:linear-gradient(135deg,#ef4444,#f59e0b,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+
+/* Hero strip */
+.hero-strip{background:linear-gradient(135deg,rgba(239,68,68,.08),rgba(245,158,11,.06));border:1px solid rgba(239,68,68,.2);border-radius:16px;padding:14px 16px;margin-bottom:18px;text-align:center;}
+.hero-strip p{font-size:12px;color:var(--muted);font-weight:600;line-height:1.6;}
+.hero-strip strong{color:var(--red);}
+
+/* Stats */
+.stats-bar{display:flex;gap:8px;margin-bottom:18px;}
+.stat-chip{flex:1;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 6px;text-align:center;}
+.stat-n{font-family:'Nunito',sans-serif;font-size:18px;font-weight:900;}
+.stat-l{font-size:9px;color:var(--muted);font-weight:600;margin-top:2px;}
+.bio-stat .stat-n{color:var(--green);}
+.phy-stat .stat-n{color:var(--gold);}
+.chem-stat .stat-n{color:var(--blue);}
+
+/* Subject tabs */
+.tabs{display:flex;gap:8px;margin-bottom:14px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:5px;}
+.tab{flex:1;padding:8px 4px;border-radius:11px;border:none;background:transparent;color:var(--muted);font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;transition:all .2s;text-align:center;}
+.tab.active-bio{background:rgba(16,185,129,.15);color:var(--green);}
+.tab.active-phy{background:rgba(245,158,11,.12);color:var(--gold);}
+.tab.active-chem{background:rgba(59,130,246,.12);color:var(--blue);}
+
+/* Category filter */
+.cat-scroll{display:flex;gap:6px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;scrollbar-width:none;}
+.cat-scroll::-webkit-scrollbar{display:none;}
+.cat-btn{white-space:nowrap;padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-family:'Nunito',sans-serif;font-size:11px;font-weight:800;cursor:pointer;transition:all .15s;}
+.cat-btn.on-exception{background:rgba(245,158,11,.12);border-color:rgba(245,158,11,.3);color:var(--gold);}
+.cat-btn.on-wrong{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.3);color:var(--red);}
+.cat-btn.on-confusing{background:rgba(168,85,247,.12);border-color:rgba(168,85,247,.3);color:var(--purple);}
+.cat-btn.on-ar{background:rgba(6,182,212,.12);border-color:rgba(6,182,212,.3);color:var(--cyan);}
+.cat-btn.on-repeated{background:rgba(236,72,153,.12);border-color:rgba(236,72,153,.3);color:var(--pink);}
+.cat-btn.on-all{background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.15);color:var(--text);}
+
+/* Search */
+.search-wrap{position:relative;margin-bottom:14px;}
+.search-input{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:10px 14px 10px 36px;color:var(--text);font-family:'Quicksand',sans-serif;font-size:13px;font-weight:600;outline:none;transition:border-color .2s;}
+.search-input:focus{border-color:rgba(239,68,68,.35);}
+.search-icon{position:absolute;left:12px;top:50%;transform:translateY(-50%);font-size:13px;opacity:.45;}
+
+/* Chapter cards */
+.chapter-list{display:grid;gap:10px;}
+
+.ch-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;transition:border-color .2s;}
+.ch-card.has-open{border-color:rgba(239,68,68,.25);}
+
+.ch-header{padding:14px 16px 10px;display:flex;align-items:flex-start;gap:10px;cursor:pointer;}
+.ch-num{font-family:'Space Mono',monospace;font-size:9px;font-weight:700;padding:3px 7px;border-radius:6px;white-space:nowrap;margin-top:3px;}
+.bio-num{background:rgba(16,185,129,.1);color:var(--green);}
+.phy-num{background:rgba(245,158,11,.1);color:var(--gold);}
+.chem-num{background:rgba(59,130,246,.1);color:var(--blue);}
+
+.ch-meta{flex:1;}
+.ch-title{font-family:'Nunito',sans-serif;font-size:14px;font-weight:900;margin-bottom:2px;}
+.ch-count{font-size:10px;color:var(--muted);font-weight:600;}
+.expand-icon{font-size:12px;color:var(--muted);transition:transform .25s;margin-top:4px;}
+.ch-card.open .expand-icon{transform:rotate(180deg);}
+
+.ch-body{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(0.4,0,0.2,1);}
+.ch-card.open .ch-body{max-height:9000px;}
+.ch-content{border-top:1px solid var(--border);padding:12px 14px 16px;}
+
+/* Trap items */
+.trap-item{border-radius:12px;padding:11px 13px;margin-bottom:8px;border-left:3px solid transparent;}
+.trap-item:last-child{margin-bottom:0;}
+
+.trap-item.exception{background:rgba(245,158,11,.06);border-left-color:var(--gold);}
+.trap-item.wrong{background:rgba(239,68,68,.06);border-left-color:var(--red);}
+.trap-item.confusing{background:rgba(168,85,247,.06);border-left-color:var(--purple);}
+.trap-item.ar{background:rgba(6,182,212,.06);border-left-color:var(--cyan);}
+.trap-item.repeated{background:rgba(236,72,153,.06);border-left-color:var(--pink);}
+
+.trap-tag{display:inline-block;font-family:'Space Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.08em;padding:2px 7px;border-radius:5px;margin-bottom:6px;}
+.tag-exception{background:rgba(245,158,11,.15);color:var(--gold);}
+.tag-wrong{background:rgba(239,68,68,.15);color:var(--red);}
+.tag-confusing{background:rgba(168,85,247,.15);color:var(--purple);}
+.tag-ar{background:rgba(6,182,212,.15);color:var(--cyan);}
+.tag-repeated{background:rgba(236,72,153,.15);color:var(--pink);}
+
+.trap-q{font-size:12px;font-weight:700;color:var(--text);line-height:1.5;margin-bottom:4px;}
+.trap-a{font-size:11px;font-weight:600;color:var(--muted);line-height:1.5;}
+.trap-a strong{color:var(--text);}
+.trap-a .correct{color:var(--green);font-weight:700;}
+.trap-a .wrong-ans{color:var(--red);font-weight:700;text-decoration:line-through;}
+
+.empty{text-align:center;padding:36px 20px;color:var(--muted);font-size:13px;font-weight:600;}
+</style>
+</head>
+<body>
+<div class="bgc"><div class="orb o1"></div><div class="orb o2"></div><div class="orb o3"></div><div class="grid"></div></div>
+
+<div class="page">
+
+<div class="top-bar">
+  <a href="index.html" class="back-btn">← Home</a>
+  <div class="page-title">🪤 NCERT Trap Book</div>
+</div>
+
+<div class="hero-strip">
+  <p>Marks are lost not from ignorance — but from <strong>falling for traps</strong>.<br>
+  Every confusing line, exception, and wrong statement NCERT ever placed — captured here.</p>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-chip bio-stat"><div class="stat-n" id="bio-count">—</div><div class="stat-l">🧬 Bio Traps</div></div>
+  <div class="stat-chip phy-stat"><div class="stat-n" id="phy-count">—</div><div class="stat-l">⚡ Phy Traps</div></div>
+  <div class="stat-chip chem-stat"><div class="stat-n" id="chem-count">—</div><div class="stat-l">⚗️ Chem Traps</div></div>
+</div>
+
+<div class="tabs">
+  <button class="tab active-bio" onclick="switchTab('bio',this)">🧬 Biology</button>
+  <button class="tab" onclick="switchTab('phy',this)">⚡ Physics</button>
+  <button class="tab" onclick="switchTab('chem',this)">⚗️ Chemistry</button>
+</div>
+
+<div class="cat-scroll">
+  <button class="cat-btn on-all" onclick="setCat('all',this)">🔥 All</button>
+  <button class="cat-btn" onclick="setCat('exception',this)">⚠️ Exceptions</button>
+  <button class="cat-btn" onclick="setCat('wrong',this)">❌ Wrong Statements</button>
+  <button class="cat-btn" onclick="setCat('confusing',this)">😵 Confusing Lines</button>
+  <button class="cat-btn" onclick="setCat('ar',this)">🔗 A/R Traps</button>
+  <button class="cat-btn" onclick="setCat('repeated',this)">🔁 Repeated in NEET</button>
+</div>
+
+<div class="search-wrap">
+  <span class="search-icon">🔍</span>
+  <input class="search-input" type="text" placeholder="Search traps, chapters..." id="searchInput" oninput="render()">
+</div>
+
+<div class="chapter-list" id="trapList"></div>
+</div>
+
+<script>
+// Category: exception | wrong | confusing | ar | repeated
+const TRAPS = {
+bio: [
+  { ch:"01", title:"The Living World", traps:[
+    { cat:"confusing", q:"Is virus a living or non-living thing?", a:"<span class='wrong-ans'>Living</span> — Viruses show characteristics of both. They are <span class='correct'>acellular</span> and considered non-living outside the host but show life processes inside. NEET often exploits this grey area." },
+    { cat:"wrong", q:"'Metabolism is the defining criterion of life' — True or False?", a:"<span class='wrong-ans'>True</span> is the trap answer. Correct: Even isolated enzymes show metabolism in vitro. So <span class='correct'>consciousness</span> is considered the defining feature of life in NCERT." },
+    { cat:"repeated", q:"What is the correct sequence of taxonomic hierarchy?", a:"<span class='correct'>Species → Genus → Family → Order → Class → Phylum → Kingdom</span>. Trap: Many confuse Order and Class positions." },
+    { cat:"exception", q:"Which taxonomic category has real existence in nature?", a:"Only <span class='correct'>Species</span> has real existence. All higher taxa are constructs of human mind." },
+    { cat:"ar", q:"A: Biological names are in Latin. R: Latin is universal and not spoken, so cannot be modified.", a:"<span class='correct'>Both A and R are true, and R is the correct explanation of A.</span> Classic A/R — students wrongly pick 'A true, R false'." }
+  ]},
+  { ch:"02", title:"Biological Classification", traps:[
+    { cat:"exception", q:"Oomycetes (water moulds like Phytophthora) — Fungi or Protista?", a:"<span class='wrong-ans'>Fungi</span> is the common wrong answer. They are placed in <span class='correct'>Protista</span> in Whittaker's system. Their cell wall has cellulose, not chitin." },
+    { cat:"confusing", q:"Mycoplasma has no cell wall — does it belong to Monera or Protista?", a:"<span class='correct'>Monera</span>. Mycoplasma is a prokaryote (no nuclear membrane). No cell wall does NOT mean it's a eukaryote." },
+    { cat:"wrong", q:"'All members of Monera are autotrophic' — Correct?", a:"<span class='wrong-ans'>Correct</span> is the trap. <span class='correct'>False</span> — Monera includes both autotrophic (cyanobacteria) and heterotrophic (most bacteria) members." },
+    { cat:"repeated", q:"Which kingdom does Euglena belong to?", a:"<span class='correct'>Protista</span>. Trap: It has chloroplasts so students say Plantae. But it's unicellular eukaryote = Protista." },
+    { cat:"confusing", q:"Lichens are placed in which kingdom?", a:"Lichens are <span class='correct'>not placed in any kingdom separately</span>. They are a symbiotic association — Fungi (mycobiont) + Algae (phycobiont). Placed with Fungi by most authorities." },
+    { cat:"ar", q:"A: Cyanobacteria are called blue-green algae. R: They perform oxygenic photosynthesis like plants.", a:"<span class='correct'>Both A and R true, but R is NOT the explanation of A.</span> They are called algae due to historical reasons, not photosynthesis type." },
+    { cat:"exception", q:"Which virus has DNA as its genetic material?", a:"Most viruses have RNA, but <span class='correct'>Bacteriophage, Adenovirus, Herpesvirus</span> have DNA. Tobacco Mosaic Virus (TMV) has RNA — a classic NEET trap." },
+    { cat:"wrong", q:"'Prions are nucleoproteins' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Prions are infectious proteins with NO nucleic acid.</span> They cause BSE (mad cow disease)." }
+  ]},
+  { ch:"03", title:"Plant Kingdom", traps:[
+    { cat:"exception", q:"Algae are placed in Plantae — True or False?", a:"<span class='wrong-ans'>True</span> is the trap. <span class='correct'>False</span> in Whittaker's system — Algae are in Protista (unicellular) or Plantae only if multicellular and depending on classification system. NCERT Class 11 places multicellular algae in Plantae." },
+    { cat:"confusing", q:"What is the dominant phase in Bryophytes vs Pteridophytes?", a:"Bryophytes: <span class='correct'>Gametophyte dominant</span> (the green plant you see). Pteridophytes: <span class='correct'>Sporophyte dominant</span>. Trap: Students flip these." },
+    { cat:"repeated", q:"In which plant group is alternation of generations most prominent and independent?", a:"<span class='correct'>Pteridophytes</span> — both phases are independent and free-living. In Bryophytes, sporophyte is dependent on gametophyte." },
+    { cat:"exception", q:"All gymnosperms are evergreen — exception?", a:"<span class='correct'>Larix (Larch)</span> is a deciduous gymnosperm — loses leaves in winter. Rare exception asked in NEET." },
+    { cat:"wrong", q:"'Selaginella is a homosporous pteridophyte' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Selaginella is heterosporous</span> (produces micro and mega spores). Lycopodium is homosporous." },
+    { cat:"ar", q:"A: Bryophytes are called amphibians of plant kingdom. R: They need water for fertilization.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Water is needed for motile antherozoids to reach archegonium." },
+    { cat:"confusing", q:"What is the ploidy of endosperm in gymnosperms vs angiosperms?", a:"Gymnosperms: endosperm is <span class='correct'>haploid (n)</span> — formed before fertilization. Angiosperms: endosperm is <span class='correct'>triploid (3n)</span> — formed by triple fusion." }
+  ]},
+  { ch:"04", title:"Animal Kingdom", traps:[
+    { cat:"confusing", q:"What type of coelom do Annelids have?", a:"<span class='correct'>True coelom (eucoelomate)</span>. Trap: Students confuse Annelida with Nematoda. Nematoda are pseudocoelomate." },
+    { cat:"exception", q:"All mammals are viviparous — exceptions?", a:"<span class='correct'>Platypus (Ornithorhynchus) and Echidna</span> are oviparous mammals (Prototheria/Monotremata). Very frequently asked." },
+    { cat:"wrong", q:"'Sharks are bony fish (Osteichthyes)' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Sharks are <span class='correct'>cartilaginous fish (Chondrichthyes)</span>. Bony fish = Rohu, Labeo, Catla, Tuna." },
+    { cat:"repeated", q:"Which is the largest phylum in Animal Kingdom?", a:"<span class='correct'>Arthropoda</span> — largest phylum. Students confuse with Mollusca (second largest)." },
+    { cat:"confusing", q:"Sea anemone — radial or bilateral symmetry?", a:"<span class='correct'>Radial symmetry</span>. Sea anemone is Cnidaria. Don't confuse with Echinodermata adults (also radial) vs larva (bilateral)." },
+    { cat:"ar", q:"A: Echinoderms are coelomate. R: They have a true body cavity lined by mesoderm.", a:"<span class='correct'>Both A and R are true and R correctly explains A.</span>" },
+    { cat:"exception", q:"Which non-chordate has a notochord-like structure?", a:"<span class='correct'>None</span> — notochord is exclusive to chordates. Trap: Balanoglossus (Hemichordata) has a 'stomochord' not a true notochord." },
+    { cat:"wrong", q:"'Flame cells are found in Annelida for excretion' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Flame cells are in <span class='correct'>Platyhelminthes</span>. Annelids have nephridia." }
+  ]},
+  { ch:"05", title:"Morphology of Flowering Plants", traps:[
+    { cat:"confusing", q:"Is Potato a stem modification or root modification?", a:"<span class='correct'>Stem modification (underground stem = tuber)</span>. Eyes of potato = nodes. Root never has nodes or internodes." },
+    { cat:"confusing", q:"Is Sweet potato a stem or root modification?", a:"<span class='correct'>Root modification (tuberous root)</span>. Contrast: Potato = stem, Sweet potato = root." },
+    { cat:"exception", q:"Tendrils of Pea vs Cucumber — leaf or stem?", a:"Pea tendrils = <span class='correct'>leaf modifications</span>. Cucumber tendrils = <span class='correct'>stem modifications</span>. Repeated NEET trap." },
+    { cat:"repeated", q:"Which part of coconut do we eat?", a:"<span class='correct'>Endosperm</span> (the white fleshy part). Coconut water = liquid endosperm. Coconut is a one-seeded drupe." },
+    { cat:"wrong", q:"'Onion is a root' — True?", a:"<span class='wrong-ans'>True</span> is the trap. Onion is a <span class='correct'>bulb — a modified underground stem</span>. It has nodes, internodes, scale leaves." },
+    { cat:"confusing", q:"Ginger vs Turmeric — rhizome or corm?", a:"Both Ginger and Turmeric are <span class='correct'>rhizomes</span>. Colocasia (Arbi) is a <span class='correct'>corm</span>. Crocus is also corm." },
+    { cat:"ar", q:"A: Banyan tree has prop roots. R: Prop roots provide mechanical support.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Prop roots = adventitious roots from branches." }
+  ]},
+  { ch:"08", title:"Cell — The Unit of Life", traps:[
+    { cat:"exception", q:"Which cell organelle has its own DNA and ribosomes?", a:"<span class='correct'>Mitochondria AND Chloroplast</span> both. Trap: Students mention only one." },
+    { cat:"wrong", q:"'Lysosomes are formed by Endoplasmic Reticulum' — True?", a:"<span class='wrong-ans'>True</span> is trap. <span class='correct'>Lysosomes are formed by Golgi apparatus</span> (Golgi bodies package hydrolytic enzymes)." },
+    { cat:"confusing", q:"Ribosomes of mitochondria — 70S or 80S?", a:"<span class='correct'>70S</span> (like prokaryotes). Cytoplasmic ribosomes of eukaryotes = 80S. This supports endosymbiotic theory." },
+    { cat:"repeated", q:"Which structure is absent in plant cells?", a:"<span class='correct'>Centriole / Centrosome</span>. Also: Plant cells lack lysosomes (vacuoles do that job). Animal cells lack plastids and large central vacuole." },
+    { cat:"exception", q:"Prokaryotes don't have membrane-bound organelles — exception?", a:"<span class='correct'>No exception</span> — this is absolute. Trap: Students think mitochondria-like structures exist. They have mesosome (infolding of plasma membrane) instead." },
+    { cat:"confusing", q:"What is the unit membrane model vs fluid mosaic model?", a:"Unit membrane (Robertson): 3-layered protein-lipid-protein. <span class='correct'>Fluid mosaic (Singer & Nicolson, 1972)</span>: Phospholipid bilayer with proteins embedded — CORRECT current model." },
+    { cat:"ar", q:"A: Golgi is called 'traffic police' of the cell. R: It modifies, packages and dispatches proteins.", a:"<span class='correct'>Both true, R correctly explains A.</span> Golgi receives from RER (cis face) and ships out (trans face)." }
+  ]},
+  { ch:"09", title:"Biomolecules", traps:[
+    { cat:"exception", q:"Are enzymes always proteins?", a:"<span class='wrong-ans'>Yes always</span> is the trap. Exception: <span class='correct'>Ribozymes</span> are RNA molecules with catalytic activity. Discovered by Altman and Cech (Nobel 1989)." },
+    { cat:"confusing", q:"What is the difference between Km and Vmax?", a:"Km = substrate concentration at half Vmax — <span class='correct'>measure of enzyme-substrate affinity</span>. Low Km = high affinity. Vmax = maximum rate at saturating substrate." },
+    { cat:"wrong", q:"'Competitive inhibition permanently inactivates enzyme' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Competitive inhibition is <span class='correct'>reversible</span>. It is overcome by increasing substrate concentration. Non-competitive/irreversible inhibitors permanently inactivate." },
+    { cat:"repeated", q:"Which bond connects amino acids in a protein?", a:"<span class='correct'>Peptide bond</span> (between COOH of one and NH₂ of next). Trap: Students say 'amide bond' — technically correct but NEET expects 'peptide bond'." },
+    { cat:"exception", q:"Fats cannot be digested — exception?", a:"Trick question. <span class='correct'>Fats ARE digested</span> by lipases. The exception concept here: Waxes (like beeswax) are not digested by humans." },
+    { cat:"confusing", q:"Cellulose vs Starch — what's the key difference for NEET?", a:"Both are polysaccharides of glucose. Starch: <span class='correct'>α-glycosidic bond</span> (digestible). Cellulose: <span class='correct'>β-glycosidic bond</span> (not digestible by humans — no cellulase)." }
+  ]},
+  { ch:"10", title:"Cell Cycle and Cell Division", traps:[
+    { cat:"repeated", q:"At which stage of meiosis does crossing over occur?", a:"<span class='correct'>Pachytene stage of Prophase I</span>. Trap: Students say 'Zygotene' (that's when synapsis occurs). Pachytene = crossing over." },
+    { cat:"confusing", q:"What is the difference between synapsis and crossing over?", a:"Synapsis (Zygotene): <span class='correct'>Pairing of homologous chromosomes</span>. Crossing over (Pachytene): <span class='correct'>Physical exchange of segments</span> between non-sister chromatids." },
+    { cat:"exception", q:"Mitosis always produces 2 daughter cells — exceptions?", a:"<span class='correct'>Some algae and fungi</span> show multiple fission producing more than 2 cells. Also, in plants mitosis can produce cell plates differently." },
+    { cat:"wrong", q:"'Centrioles are essential for cell division in all organisms' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Higher plants lack centrioles but still undergo mitosis</span>. Spindle forms without centrioles in plants." },
+    { cat:"ar", q:"A: Metaphase is best stage to count chromosomes. R: Chromosomes are most condensed and arranged at equatorial plate.", a:"<span class='correct'>Both A and R are true and R correctly explains A.</span> This is a repeated NEET A/R." },
+    { cat:"confusing", q:"G₀ phase — is it part of interphase or separate?", a:"G₀ is a <span class='correct'>quiescent phase</span> where cells exit the cell cycle. It is separate from G₁. Neurons and muscle cells stay in G₀ (don't divide)." }
+  ]},
+  { ch:"13", title:"Photosynthesis", traps:[
+    { cat:"exception", q:"In PS II, which molecule is oxidized?", a:"<span class='correct'>Water (H₂O)</span> is oxidized → O₂ is released. Trap: Students say 'PS II oxidizes chlorophyll'. Chlorophyll loses electrons but water is the ultimate electron donor." },
+    { cat:"confusing", q:"Where exactly does O₂ evolution occur?", a:"O₂ evolves at <span class='correct'>PS II (Photosystem II, P680)</span> by photolysis of water. NOT at PS I. Students confuse because PS I was discovered first." },
+    { cat:"wrong", q:"'C4 plants don't do Calvin cycle' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>C4 plants DO perform Calvin cycle in bundle sheath cells</span>. The C4 pathway (OAA) is an ADDITIONAL CO₂ concentrating mechanism." },
+    { cat:"repeated", q:"What is the first stable product of C3 and C4 photosynthesis?", a:"C3: <span class='correct'>3-PGA (3-phosphoglycerate)</span>. C4: <span class='correct'>OAA (oxaloacetic acid, 4 carbons)</span>. Maize, Sugarcane are C4." },
+    { cat:"exception", q:"Photorespiration occurs in all plants — exception?", a:"<span class='correct'>C4 and CAM plants</span> have negligible photorespiration. Only C3 plants show significant photorespiration (wasteful process)." },
+    { cat:"ar", q:"A: CAM plants open stomata at night. R: This reduces water loss during hot day.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> CAM = Crassulacean Acid Metabolism (Cactus, Pineapple, Agave)." },
+    { cat:"confusing", q:"Cyclic vs Non-cyclic photophosphorylation — where does each occur?", a:"Cyclic: Only <span class='correct'>PS I</span> involved; produces only ATP; no NADPH, no O₂. Non-cyclic: <span class='correct'>Both PS I and PS II</span>; produces ATP + NADPH + O₂." }
+  ]},
+  { ch:"14", title:"Respiration in Plants", traps:[
+    { cat:"repeated", q:"What is the net ATP yield from one glucose in aerobic respiration?", a:"<span class='correct'>36 or 38 ATP</span> (textbook says 36; some say 38). NCERT Class 11 uses <span class='correct'>36 ATP</span>. Don't write 38 in NEET unless choices say so." },
+    { cat:"confusing", q:"Glycolysis occurs in cytoplasm — with or without oxygen?", a:"Glycolysis occurs in <span class='correct'>cytoplasm and does NOT require oxygen</span>. It is common to both aerobic and anaerobic respiration." },
+    { cat:"wrong", q:"'Fermentation produces more ATP than aerobic respiration' — True?", a:"<span class='wrong-ans'>True</span> is absolutely wrong. Fermentation gives only <span class='correct'>2 ATP</span> vs 36 ATP aerobically." },
+    { cat:"exception", q:"RQ of fats is less than 1 — what about proteins?", a:"RQ of carbohydrates = 1. Fats < 1. Proteins ≈ <span class='correct'>0.9</span>. Organic acids > 1 (e.g. malic acid RQ ≈ 1.33). Fasting organism: RQ approaches 0.7." },
+    { cat:"ar", q:"A: Krebs cycle occurs in mitochondrial matrix. R: Mitochondria is the powerhouse of the cell.", a:"Both A and R are true but <span class='correct'>R is NOT the explanation of A</span>. R is a general statement. Correct explanation: Matrix contains enzymes of Krebs cycle." }
+  ]},
+  { ch:"16", title:"Digestion and Absorption", traps:[
+    { cat:"exception", q:"Which enzyme is NOT present in pancreatic juice?", a:"<span class='correct'>Enterokinase (Enteropeptidase)</span> is produced by duodenal mucosa, NOT pancreas. Trap: Students include it in pancreatic juice list." },
+    { cat:"confusing", q:"What activates trypsinogen?", a:"<span class='correct'>Enterokinase</span> activates trypsinogen → trypsin. Then trypsin activates other pancreatic proenzymes (autocatalytic)." },
+    { cat:"wrong", q:"'Bile contains digestive enzymes' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Bile has NO enzymes</span>. It emulsifies fats (physical process) using bile salts." },
+    { cat:"repeated", q:"Where does maximum absorption of nutrients occur?", a:"<span class='correct'>Jejunum</span> (middle part of small intestine). Ileum absorbs remaining nutrients and vitamin B12. Trap: Students say 'small intestine' which is vague." },
+    { cat:"exception", q:"All digestion occurs by hydrolysis — any exception?", a:"<span class='correct'>No significant exception</span> — all macromolecule digestion uses hydrolase enzymes. Trap question to test if you say 'emulsification' — that's physical, not digestion." },
+    { cat:"ar", q:"A: Stomach produces HCl. R: HCl kills bacteria and activates pepsinogen.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Chief cells secrete pepsinogen; parietal cells secrete HCl." }
+  ]},
+  { ch:"17", title:"Breathing and Exchange of Gases", traps:[
+    { cat:"confusing", q:"Tidal Volume vs Inspiratory Reserve Volume — which is larger?", a:"IRV (<span class='correct'>2500–3000 mL</span>) >> TV (500 mL). Trap: Students think TV is large since it's 'tidal'." },
+    { cat:"wrong", q:"'Residual Volume can be expelled by forceful expiration' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>RV (1100-1200 mL) CANNOT be expelled</span> even by maximum effort. That's why lungs never collapse completely." },
+    { cat:"repeated", q:"What percentage of CO₂ is transported as bicarbonate?", a:"<span class='correct'>70%</span> as bicarbonate (HCO₃⁻). 20-25% bound to haemoglobin. 7% dissolved in plasma." },
+    { cat:"exception", q:"Oxygen transport by plasma — how much?", a:"Only <span class='correct'>3%</span> of O₂ is dissolved in plasma. 97% bound to haemoglobin. Trap: Students say O₂ is transported mainly by plasma." },
+    { cat:"confusing", q:"What is Bohr effect?", a:"High CO₂ / low pH / high temperature → <span class='correct'>decreased O₂ affinity of Hb</span> (Hb releases more O₂ to tissues). Important for gas exchange at tissue level." },
+    { cat:"ar", q:"A: Partial pressure of O₂ is higher in alveoli than in blood. R: O₂ moves from alveoli to blood by diffusion.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> pO₂ alveoli ≈ 104 mmHg; pO₂ blood = 40 mmHg." }
+  ]},
+  { ch:"18", title:"Body Fluids and Circulation", traps:[
+    { cat:"exception", q:"All mammals have 4-chambered heart — exceptions?", a:"<span class='correct'>No exception among mammals</span>. All mammals including whales, bats have 4 chambers. Trap: Students say fish (2), amphibians (3), reptiles (3.5/4)." },
+    { cat:"repeated", q:"SA node is located in which chamber?", a:"<span class='correct'>Right atrium</span>. SA node = sinoatrial node = pacemaker. Generates impulse 72/min. Trap: Students say 'right ventricle'." },
+    { cat:"confusing", q:"ECG: What does each wave represent?", a:"P wave = <span class='correct'>Atrial depolarization</span>. QRS complex = <span class='correct'>Ventricular depolarization</span>. T wave = <span class='correct'>Ventricular repolarization</span>. Trap: Students say T wave = atrial repolarization (hidden in QRS)." },
+    { cat:"wrong", q:"'Blood group O is universal donor because it has no antibodies' — True?", a:"<span class='wrong-ans'>True</span> is wrong. O has <span class='correct'>no antigens</span> (that's why universal donor). But it HAS both anti-A and anti-B antibodies." },
+    { cat:"exception", q:"Lymph is colorless — exception?", a:"Lymph from intestinal lacteals is <span class='correct'>milky white</span> (called chyle) due to absorbed fat (chylomicrons). All other lymph is colorless." },
+    { cat:"ar", q:"A: AV node is called secondary pacemaker. R: AV node can generate impulse if SA node fails.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> AV node fires at 40-60/min if SA node fails." }
+  ]},
+  { ch:"19", title:"Excretory Products and Elimination", traps:[
+    { cat:"confusing", q:"Counter current mechanism — which part of nephron?", a:"<span class='correct'>Loop of Henle and Vasa recta</span> form the countercurrent system. Loop of Henle (countercurrent multiplier); Vasa recta (countercurrent exchanger)." },
+    { cat:"wrong", q:"'Glucose is completely filtered but none is reabsorbed' — True?", a:"<span class='wrong-ans'>True</span> is completely wrong. Glucose is <span class='correct'>completely reabsorbed in PCT</span>. It appears in urine (glucosuria) only when blood glucose > renal threshold (~180 mg/dL)." },
+    { cat:"repeated", q:"JGA secretes which hormone in response to low BP?", a:"JGA (Juxtaglomerular Apparatus) secretes <span class='correct'>Renin</span> → activates angiotensin → aldosterone release → Na⁺ retention → BP increases." },
+    { cat:"exception", q:"Urea is the only nitrogenous waste in humans — True?", a:"<span class='wrong-ans'>True</span> is trap. Humans are primarily ureotelic but also excrete <span class='correct'>uric acid, creatinine, ammonia</span> in small amounts." },
+    { cat:"confusing", q:"ADH acts on DCT or collecting duct?", a:"<span class='correct'>Both DCT and Collecting duct</span>. ADH (vasopressin) increases water permeability of both. Aldosterone acts on DCT for Na⁺ reabsorption." },
+    { cat:"ar", q:"A: Glomerular filtration is a passive process. R: It does not require energy and is driven by blood pressure.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> GFR = 125 mL/min; 180 L/day filtered." }
+  ]},
+  { ch:"21", title:"Neural Control and Coordination", traps:[
+    { cat:"confusing", q:"Cerebrum vs Cerebellum — what controls what?", a:"Cerebrum: <span class='correct'>Intelligence, memory, consciousness, voluntary actions</span>. Cerebellum: <span class='correct'>Coordination of voluntary movements, balance, posture</span>. Trap: Students say cerebellum controls intelligence." },
+    { cat:"wrong", q:"'Spinal cord has grey matter outside and white matter inside' — True?", a:"<span class='wrong-ans'>True</span> is wrong — this is the <span class='correct'>OPPOSITE</span>. Spinal cord: <span class='correct'>Grey matter inside (H-shaped), white matter outside</span>. Brain: white matter inside, grey outside (cortex)." },
+    { cat:"repeated", q:"What is the resting membrane potential of a neuron?", a:"<span class='correct'>–70 mV</span> (inside negative). Due to Na⁺-K⁺ pump (3 Na⁺ out, 2 K⁺ in) and K⁺ leak channels." },
+    { cat:"exception", q:"All synapses use chemical neurotransmitters — exception?", a:"<span class='correct'>Electrical synapses (gap junctions)</span> — transmission without neurotransmitter; faster. Found in heart, smooth muscle." },
+    { cat:"ar", q:"A: Acetylcholine is excitatory at neuromuscular junction. R: ACh binding opens Na⁺ channels causing depolarization.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> AChE breaks down ACh to terminate signal." }
+  ]},
+  { ch:"22", title:"Chemical Coordination and Integration", traps:[
+    { cat:"confusing", q:"Which cells in Islets of Langerhans secrete insulin vs glucagon?", a:"α cells → <span class='correct'>Glucagon</span> (raises blood glucose). β cells → <span class='correct'>Insulin</span> (lowers blood glucose). δ cells → Somatostatin. Trap: Students swap α and β." },
+    { cat:"exception", q:"All hormones are proteins — True?", a:"<span class='wrong-ans'>True</span> is wrong. Hormones can be: <span class='correct'>Proteins (insulin), Steroids (cortisol, testosterone), Amino acid derivatives (thyroxine, adrenaline), Peptides (oxytocin)</span>." },
+    { cat:"wrong", q:"'Posterior pituitary synthesizes ADH and oxytocin' — True?", a:"<span class='wrong-ans'>True</span> is wrong. These are <span class='correct'>synthesized in hypothalamus</span> and only STORED and RELEASED by posterior pituitary." },
+    { cat:"repeated", q:"Which hormone is called 'emergency hormone'?", a:"<span class='correct'>Adrenaline (Epinephrine)</span> from adrenal medulla — fight or flight response. Trap: Students say cortisol (that's stress hormone, not emergency)." },
+    { cat:"ar", q:"A: Thyroid is essential for normal growth and development. R: Thyroid hormones regulate basal metabolic rate.", a:"<span class='correct'>Both A and R true, R is NOT the complete explanation</span>. Thyroid also needed for brain development, ossification, etc. Standard trap." }
+  ]},
+  { ch:"23", title:"Reproduction in Organisms", traps:[
+    { cat:"confusing", q:"Budding in Hydra vs Yeast — internal or external?", a:"Both are external budding. Hydra: <span class='correct'>Bud forms on body wall, detaches when mature</span>. Yeast: <span class='correct'>Small bud grows on parent cell</span>. Sporulation in Rhizopus — different from budding." },
+    { cat:"exception", q:"Vegetative propagation always produces genetically identical plants — exception?", a:"<span class='correct'>Somatic mutations</span> can cause genetic variation even in vegetative propagation. Also, sports/mutations in banana clones. This is a conceptual trap." },
+    { cat:"wrong", q:"'Parthenogenesis produces haploid organisms only' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Parthenogenesis can produce diploid organisms</span> too (e.g. turkey, Komodo dragon via apomixis mechanisms)." },
+    { cat:"repeated", q:"Which organisms show external fertilization?", a:"<span class='correct'>Most aquatic organisms — frogs, fish, most algae</span>. They release enormous numbers of gametes. Trap: Students say all amphibians — salamanders have internal fertilization." }
+  ]},
+  { ch:"24", title:"Sexual Reproduction in Flowering Plants", traps:[
+    { cat:"repeated", q:"What is double fertilization and who discovered it?", a:"<span class='correct'>Navaschin (1898)</span> discovered double fertilization. Sperms + egg = zygote (2n); sperm + 2 polar nuclei = PEN/endosperm (3n). Unique to angiosperms." },
+    { cat:"confusing", q:"How many cells and nuclei does a mature embryo sac have?", a:"<span class='correct'>7 cells and 8 nuclei</span>: 3 antipodals, 2 synergids, 1 egg cell, 1 central cell with 2 polar nuclei." },
+    { cat:"exception", q:"All pollen grains are 2-celled when shed — exception?", a:"Most plants shed 2-celled pollen (generative + vegetative cell). But some plants like <span class='correct'>grasses shed 3-celled pollen</span> (generative divides before shedding)." },
+    { cat:"wrong", q:"'Emasculation is done to prevent self-pollination in male plants' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Emasculation = <span class='correct'>removal of anthers from bisexual flowers</span> before they mature. Done in plant breeding." },
+    { cat:"ar", q:"A: Tapetum is the innermost layer of anther wall. R: Tapetum nourishes developing pollen grains.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Tapetum also provides sporopollenin for exine formation." }
+  ]},
+  { ch:"25", title:"Human Reproduction", traps:[
+    { cat:"confusing", q:"Leydig cells vs Sertoli cells — functions?", a:"Leydig (Interstitial) cells: <span class='correct'>Secrete testosterone</span>. Sertoli (Nurse) cells: <span class='correct'>Nourish developing sperms, secrete ABP (Androgen Binding Protein), inhibin</span>." },
+    { cat:"exception", q:"Corpus luteum secretes only progesterone — True?", a:"<span class='wrong-ans'>True</span> is trap. Corpus luteum secretes <span class='correct'>both progesterone AND estrogen</span>. Progesterone is dominant." },
+    { cat:"repeated", q:"When does implantation occur after fertilization?", a:"Implantation occurs <span class='correct'>6–7 days after fertilization</span>. Blastocyst implants in uterine wall (endometrium). Trap: Students say 'zygote implants'." },
+    { cat:"wrong", q:"'Fertilization occurs in the uterus' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Fertilization occurs in <span class='correct'>Fallopian tube (ampulla region)</span>. Implantation occurs in uterus." },
+    { cat:"confusing", q:"What is the role of hCG in pregnancy?", a:"hCG (human chorionic gonadotropin) maintains <span class='correct'>corpus luteum</span> in early pregnancy so progesterone production continues. Basis of pregnancy tests." }
+  ]},
+  { ch:"27", title:"Principles of Inheritance", traps:[
+    { cat:"confusing", q:"Incomplete dominance vs Codominance — key difference?", a:"Incomplete dominance: <span class='correct'>Intermediate phenotype</span> (pink from red × white in Mirabilis). Codominance: <span class='correct'>Both alleles expressed simultaneously</span> (AB blood group shows both A and B antigens)." },
+    { cat:"exception", q:"Mendel's law of independent assortment always applies — exception?", a:"<span class='correct'>Linked genes</span> do NOT follow independent assortment. Genes on same chromosome tend to be inherited together (Morgan's work on Drosophila)." },
+    { cat:"wrong", q:"'Colourblindness is more common in females' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Colourblindness is X-linked recessive — <span class='correct'>more common in males</span> (need only one affected X). Females need both X's affected." },
+    { cat:"repeated", q:"What is the chromosomal basis of sex determination in humans?", a:"Females: <span class='correct'>XX</span>; Males: <span class='correct'>XY</span>. Sex determined by father (provides X or Y). Trap: Students say mother determines sex." },
+    { cat:"ar", q:"A: Haemophilia is a sex-linked disorder. R: The gene for blood clotting factor is on Y chromosome.", a:"A is true, R is <span class='correct'>FALSE</span>. Haemophilia gene is on <span class='correct'>X chromosome</span>, not Y. Classic wrong statement trap." }
+  ]},
+  { ch:"28", title:"Molecular Basis of Inheritance", traps:[
+    { cat:"repeated", q:"What experiment proved DNA is the genetic material conclusively?", a:"<span class='correct'>Hershey and Chase experiment (1952)</span> with bacteriophage. Used ³⁵S (protein) and ³²P (DNA) tracers. DNA entered bacteria, protein stayed outside." },
+    { cat:"confusing", q:"Template strand vs Coding strand — which is read?", a:"RNA polymerase reads the <span class='correct'>template strand (3'→5')</span>. The coding strand (non-template, sense strand) has same sequence as mRNA (with T instead of U)." },
+    { cat:"exception", q:"All codons code for amino acids — exception?", a:"<span class='correct'>Stop codons (UAA, UAG, UGA)</span> don't code for any amino acid — they signal termination. AUG is both start codon AND codes for methionine." },
+    { cat:"wrong", q:"'One gene — one enzyme hypothesis means one gene codes for one protein' — True?", a:"Oversimplification trap. Beadle & Tatum said one gene → one enzyme. But now we know: <span class='correct'>alternative splicing means one gene can produce multiple proteins</span>." },
+    { cat:"ar", q:"A: Genetic code is degenerate. R: Multiple codons can code for the same amino acid.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Leucine has 6 codons. Only Met and Trp have one codon each." }
+  ]},
+  { ch:"29", title:"Evolution", traps:[
+    { cat:"confusing", q:"Analogous vs Homologous organs — with examples?", a:"Homologous: <span class='correct'>Same origin, different function</span> (forelimbs of bat, whale, human). Analogous: <span class='correct'>Different origin, same function</span> (wings of bat vs butterfly). Convergent evolution = analogous." },
+    { cat:"wrong", q:"'Lamarck's theory of inheritance of acquired characters is accepted today' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Lamarckism is disproved</span>. Weismann cut tails of mice for 22 generations — offspring still had tails." },
+    { cat:"repeated", q:"What does Hardy-Weinberg equilibrium state?", a:"Allele frequencies <span class='correct'>remain constant from generation to generation</span> in a large, randomly mating population with no mutation, migration, selection, or genetic drift." },
+    { cat:"exception", q:"Natural selection is the only mechanism of evolution — True?", a:"<span class='wrong-ans'>True</span> is wrong. Other mechanisms: <span class='correct'>Genetic drift, Gene flow (migration), Mutation, Non-random mating</span>. All can change allele frequencies." },
+    { cat:"ar", q:"A: Industrial melanism is an example of natural selection. R: Dark moths survived better on soot-covered trees.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Biston betularia — classic Darwinian example." }
+  ]},
+  { ch:"30", title:"Human Health and Disease", traps:[
+    { cat:"exception", q:"All antibiotics kill bacteria — True?", a:"<span class='wrong-ans'>True</span> is wrong. Bactericidal antibiotics kill; <span class='correct'>Bacteriostatic antibiotics</span> (like tetracycline) only inhibit growth — immune system clears the bacteria." },
+    { cat:"confusing", q:"Active vs Passive immunity — which is faster?", a:"Passive immunity is <span class='correct'>faster</span> (immediate — readymade antibodies). Active immunity is <span class='correct'>slower but longer lasting</span>. Antivenom = passive immunity." },
+    { cat:"wrong", q:"'Cancer cells show contact inhibition' — True?", a:"<span class='wrong-ans'>True</span> is completely wrong. <span class='correct'>Cancer cells LOSE contact inhibition</span> — they keep dividing even when touching other cells (unlike normal cells)." },
+    { cat:"repeated", q:"Which mosquito transmits Dengue vs Malaria?", a:"Dengue/Chikungunya: <span class='correct'>Female Aedes aegypti</span>. Malaria: <span class='correct'>Female Anopheles</span>. Trap: Students say 'any mosquito' or swap them." },
+    { cat:"ar", q:"A: Colostrum provides passive immunity to newborns. R: It contains IgA antibodies.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> IgA in colostrum protects gut of infant." }
+  ]},
+  { ch:"32", title:"Biotechnology — Principles", traps:[
+    { cat:"confusing", q:"Restriction endonucleases cut at specific sites — blunt vs sticky ends?", a:"Blunt end cutters: <span class='correct'>SmaI, HaeIII</span>. Sticky end (cohesive) cutters: <span class='correct'>EcoRI, BamHI, HindIII</span>. Sticky ends preferred in cloning (easier ligation)." },
+    { cat:"exception", q:"PCR requires DNA polymerase — which one and why special?", a:"PCR uses <span class='correct'>Taq polymerase</span> from Thermus aquaticus. It is thermostable (survives 94°C denaturation step). Normal DNA pol would denature." },
+    { cat:"wrong", q:"'In gel electrophoresis, larger DNA fragments move faster' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Smaller fragments move faster</span> through agarose gel. Larger fragments are retarded by gel matrix." },
+    { cat:"repeated", q:"What is the role of the Ti plasmid in plant transformation?", a:"Ti plasmid from <span class='correct'>Agrobacterium tumefaciens</span> is used as a vector to deliver genes into plant cells. T-DNA integrates into plant genome. Disarmed Ti plasmid used (no tumor-causing genes)." }
+  ]},
+  { ch:"33", title:"Biotechnology and Applications", traps:[
+    { cat:"confusing", q:"Bt toxin — how does it work?", a:"Cry protein (pro-toxin) is produced by Bt. In insect gut (alkaline pH), it is <span class='correct'>activated → binds to midgut epithelium → creates pores → cell lysis → insect dies</span>. Not harmful to humans (acidic stomach)." },
+    { cat:"exception", q:"Golden rice produces Vitamin A — True?", a:"Technically <span class='wrong-ans'>True</span> but the trap is: Golden rice produces <span class='correct'>β-carotene (provitamin A)</span>, NOT Vitamin A directly. Body converts β-carotene to Vitamin A." },
+    { cat:"wrong", q:"'RNAi silences genes at the transcription level' — True?", a:"<span class='wrong-ans'>True</span> is wrong. RNAi works at <span class='correct'>post-transcriptional level</span> — dsRNA degrades complementary mRNA before translation." },
+    { cat:"repeated", q:"What is the full form of GEAC and its role?", a:"<span class='correct'>Genetic Engineering Appraisal Committee</span>. Approves validity, safety, and release of GM organisms in India. Set up by Government of India." }
+  ]},
+  { ch:"34", title:"Organisms and Populations", traps:[
+    { cat:"confusing", q:"Commensalism vs Mutualism — key difference?", a:"Commensalism: <span class='correct'>One benefits, other unaffected</span> (Orchid on tree). Mutualism: <span class='correct'>Both benefit</span> (Lichens, Rhizobium in legumes). Trap: Students say orchid is parasite." },
+    { cat:"exception", q:"Population growth is always logistic in nature — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Exponential growth</span> occurs when resources are unlimited (introduced species, bacterial growth in fresh medium)." },
+    { cat:"wrong", q:"'Predation always reduces prey population to extinction' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Predation maintains <span class='correct'>balance in ecosystem</span>. Lotka-Volterra oscillations show predator-prey coexistence." },
+    { cat:"ar", q:"A: Camouflage is a predator avoidance mechanism. R: It makes prey invisible to predators.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Also called cryptic coloration." }
+  ]},
+  { ch:"35", title:"Ecosystem", traps:[
+    { cat:"exception", q:"Energy pyramid is always upright — exception?", a:"Energy pyramid is <span class='correct'>always upright, NO exception</span>. Only the pyramid of biomass can be inverted (aquatic ecosystems where phytoplankton biomass < zooplankton at a given time)." },
+    { cat:"confusing", q:"10% law — what exactly is transferred?", a:"Only <span class='correct'>10% of energy</span> at one trophic level is available to next. 90% is lost as heat, respiration, decomposition. Law of Lindeman (1942)." },
+    { cat:"wrong", q:"'Decomposers are part of food chain' — True?", a:"<span class='wrong-ans'>True</span> is trap. <span class='correct'>Decomposers form the detritus food chain</span> starting from dead organic matter. They are NOT part of grazing food chain traditionally." },
+    { cat:"ar", q:"A: Producers occupy first trophic level. R: They fix solar energy through photosynthesis.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Producers can also be chemoautotrophs (deep sea)." }
+  ]},
+  { ch:"36", title:"Biodiversity and Conservation", traps:[
+    { cat:"repeated", q:"How many biodiversity hotspots are in India?", a:"<span class='correct'>4 hotspots</span>: Himalayas, Western Ghats, Indo-Burma, Sundaland (includes Andaman & Nicobar). Trap: NCERT Class 12 mentions 2 (Himalaya + Western Ghats) but globally there are 4 in India." },
+    { cat:"exception", q:"Ex-situ conservation means conservation outside natural habitat — any exceptions?", a:"<span class='correct'>No exceptions</span> to definition. But note: Sacred groves are <span class='correct'>in-situ</span> conservation even though they are human-managed. Students confuse this." },
+    { cat:"confusing", q:"What is the difference between endemic and endangered species?", a:"Endemic: <span class='correct'>Found ONLY in a specific geographic region</span> (naturally restricted). Endangered: <span class='correct'>At risk of extinction</span> globally. A species can be both endemic AND endangered." },
+    { cat:"wrong", q:"'More species = more stable ecosystem' — proven fact?", a:"This is the <span class='correct'>rivet popper hypothesis</span> — it's a hypothesis, not proven law. Also related to redundancy hypothesis. NEET may present it as absolute truth." }
+  ]}
+],
+
+phy: [
+  { ch:"02", title:"Motion in a Straight Line", traps:[
+    { cat:"confusing", q:"Can displacement be greater than distance?", a:"<span class='wrong-ans'>Yes</span> is wrong. <span class='correct'>Displacement ≤ Distance always</span>. Displacement = distance only for straight-line motion in one direction." },
+    { cat:"exception", q:"Acceleration must be in direction of velocity for speeding up — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>If acceleration opposes velocity, the object decelerates</span>. Also, centripetal acceleration is perpendicular — changes direction, not speed." },
+    { cat:"repeated", q:"An object has zero velocity but non-zero acceleration — possible?", a:"<span class='correct'>Yes!</span> Example: Ball thrown upward at highest point — v=0 but a=g downward. Classic NEET trap." },
+    { cat:"wrong", q:"'Uniform motion means zero acceleration' — True for circular motion?", a:"<span class='wrong-ans'>True</span> is wrong. Uniform circular motion has <span class='correct'>constant speed but changing velocity → non-zero acceleration</span> (centripetal)." },
+    { cat:"ar", q:"A: Odometer measures distance. R: Speedometer measures average speed.", a:"A is true, R is <span class='correct'>FALSE</span>. Speedometer measures <span class='correct'>instantaneous speed</span>, not average speed." }
+  ]},
+  { ch:"03", title:"Motion in a Plane", traps:[
+    { cat:"repeated", q:"At what angle is projectile range maximum?", a:"<span class='correct'>45°</span>. Range is same for complementary angles (θ and 90°−θ). E.g. 30° and 60° give same range." },
+    { cat:"confusing", q:"Horizontal component of projectile velocity — does it change?", a:"<span class='correct'>No, horizontal component is constant throughout</span> (no air resistance). Only vertical component changes due to gravity." },
+    { cat:"exception", q:"In uniform circular motion, is work done by centripetal force?", a:"<span class='correct'>Zero work</span>. Centripetal force is always perpendicular to velocity (displacement). W = Fd cosθ = Fd cos90° = 0." },
+    { cat:"ar", q:"A: In projectile motion, horizontal velocity is constant. R: Gravity acts only vertically.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span>" }
+  ]},
+  { ch:"05", title:"Laws of Motion", traps:[
+    { cat:"exception", q:"Friction always opposes motion — exception?", a:"<span class='correct'>Friction on a rolling wheel</span>: Static friction at contact point actually propels the vehicle forward (doesn't oppose motion, enables it). Classic misconception." },
+    { cat:"confusing", q:"Newton's 3rd law: Action-reaction act on same body or different bodies?", a:"<span class='correct'>Different bodies always</span>. Action on object A from B; reaction on B from A. They never cancel (different bodies). Trap: Students say they cancel each other." },
+    { cat:"wrong", q:"'Inertia is a force' — True?", a:"<span class='wrong-ans'>True</span> is absolutely wrong. <span class='correct'>Inertia is a property of matter</span>, not a force. It's the tendency to resist change in state of motion." },
+    { cat:"repeated", q:"If net force is zero, is acceleration zero?", a:"<span class='correct'>Yes</span>. But object can still be moving (uniform velocity). F=0 does NOT mean object is at rest — it means constant velocity (Newton's 1st law)." }
+  ]},
+  { ch:"06", title:"Work, Energy and Power", traps:[
+    { cat:"confusing", q:"Can kinetic energy be negative?", a:"<span class='correct'>No. KE = ½mv² always ≥ 0</span>. But potential energy CAN be negative (e.g. gravitational PE = -GMm/r)." },
+    { cat:"exception", q:"In elastic collision, are all quantities conserved?", a:"KE and momentum conserved. But <span class='correct'>kinetic energy of individual objects can change</span> — only total KE is conserved. Perfect elastic collision: e=1." },
+    { cat:"wrong", q:"'Work done against friction is stored as potential energy' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Work done against friction is <span class='correct'>converted to heat (thermal energy) — cannot be recovered</span>. Friction is non-conservative." },
+    { cat:"ar", q:"A: A body can have energy without momentum. R: A stationary body may have potential energy.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> PE exists even at rest (compressed spring, height)." }
+  ]},
+  { ch:"08", title:"Gravitation", traps:[
+    { cat:"exception", q:"Gravitational force is always attractive — exception?", a:"<span class='correct'>No exception in classical mechanics</span>. Gravity is always attractive. Trap: Some suggest repulsive gravity in exotic matter — not in NCERT scope." },
+    { cat:"confusing", q:"g decreases with altitude AND depth — same rate?", a:"<span class='correct'>No</span>. With altitude: g' = g(1-2h/R) for h<<R. With depth: g' = g(1-d/R). <span class='correct'>g decreases faster with altitude than depth at same distance from surface.</span>" },
+    { cat:"wrong", q:"'Escape velocity depends on the mass of the projected object' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Escape velocity = √(2GM/R) — <span class='correct'>independent of mass of projectile</span>." },
+    { cat:"repeated", q:"Geostationary satellite — what are the conditions?", a:"T = 24h, orbit in <span class='correct'>equatorial plane</span>, height ≈ 36000 km, rotates <span class='correct'>west to east</span> (same as Earth). Trap: Students forget 'equatorial plane' condition." }
+  ]},
+  { ch:"11", title:"Thermal Properties of Matter", traps:[
+    { cat:"exception", q:"All substances expand on heating — exception?", a:"<span class='correct'>Water contracts from 0°C to 4°C</span> (anomalous expansion). Maximum density at 4°C. This is why ice floats and aquatic life survives in frozen lakes." },
+    { cat:"confusing", q:"Latent heat — temperature changes or not?", a:"During phase change, temperature is <span class='correct'>constant</span>. Heat is used to break intermolecular bonds, not raise temperature. Q = mL (no ΔT term)." },
+    { cat:"wrong", q:"'Good absorbers of radiation are poor emitters' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Kirchhoff's law: <span class='correct'>Good absorbers are also good emitters</span>. Perfect blackbody absorbs and emits best." },
+    { cat:"ar", q:"A: A blackbody appears black. R: It absorbs all radiation falling on it.", a:"A is <span class='correct'>FALSE in general</span> (Sun is an approximate blackbody but appears yellow). R is true. This is a trap — a blackbody need not look black." }
+  ]},
+  { ch:"12", title:"Thermodynamics", traps:[
+    { cat:"confusing", q:"In isothermal process, is ΔU = 0?", a:"<span class='correct'>Yes, for ideal gas only</span>. For ideal gas, internal energy depends only on temperature. T constant → ΔU = 0 → Q = W." },
+    { cat:"exception", q:"Heat engine efficiency can reach 100% — when?", a:"Only if <span class='correct'>T_cold = 0 K</span> (absolute zero) — impossible by third law of thermodynamics. η = 1 - T_L/T_H → 1 only when T_L → 0." },
+    { cat:"wrong", q:"'Adiabatic process is always irreversible' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Reversible adiabatic process exists</span> (quasi-static, very slow). Irreversible adiabatic: sudden compression." },
+    { cat:"repeated", q:"In which process is work done maximum by an ideal gas between same initial and final states?", a:"<span class='correct'>Isothermal process</span> gives maximum work for expansion between same volume limits for ideal gas." }
+  ]},
+  { ch:"14", title:"Oscillations", traps:[
+    { cat:"confusing", q:"Time period of simple pendulum — does it depend on mass?", a:"<span class='correct'>No. T = 2π√(L/g)</span> — independent of mass and amplitude (for small angles). Heavy and light pendulums of same length oscillate identically." },
+    { cat:"exception", q:"SHM always has restoring force — any exception to F = -kx?", a:"<span class='correct'>No exception for true SHM</span>. Any deviation from F∝−x means it's not SHM (could be oscillatory but not simple harmonic)." },
+    { cat:"wrong", q:"'At mean position, acceleration is maximum in SHM' — True?", a:"<span class='wrong-ans'>True</span> is wrong. At mean position: <span class='correct'>velocity is maximum, acceleration is ZERO</span>. At extreme position: velocity zero, acceleration maximum." },
+    { cat:"ar", q:"A: Resonance can be destructive. R: Amplitude becomes very large at resonant frequency.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Example: Tacoma Narrows Bridge collapse (resonance with wind)." }
+  ]},
+  { ch:"15", title:"Waves", traps:[
+    { cat:"exception", q:"Sound cannot travel in vacuum — exception?", a:"<span class='correct'>No exception</span>. Sound requires material medium — mechanical longitudinal wave. Light travels in vacuum; sound does not." },
+    { cat:"confusing", q:"Open pipe vs Closed pipe — which has more harmonics?", a:"Open pipe: <span class='correct'>All harmonics (1st, 2nd, 3rd...)</span>. Closed pipe: <span class='correct'>Only odd harmonics (1st, 3rd, 5th...)</span>. Open pipe is richer in sound." },
+    { cat:"wrong", q:"'In standing waves, energy travels along the medium' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>In standing waves, there is NO net energy transfer</span>. Energy oscillates between KE and PE at fixed positions." },
+    { cat:"repeated", q:"What happens to frequency of sound when observer moves toward stationary source?", a:"Frequency <span class='correct'>increases</span>. f' = f(v + v_o)/v. Trap: Students confuse observer moving vs source moving formulas." }
+  ]},
+  { ch:"09", title:"Mechanical Properties of Fluids", traps:[
+    { cat:"confusing", q:"Viscosity of liquid vs gas — how do they change with temperature?", a:"Liquids: viscosity <span class='correct'>decreases</span> with increasing temperature. Gases: viscosity <span class='correct'>increases</span> with temperature. Opposite behavior — frequently asked." },
+    { cat:"exception", q:"Bernoulli's theorem is applicable to all fluids — exceptions?", a:"Bernoulli's theorem applies to <span class='correct'>ideal, non-viscous, incompressible, streamline flow</span>. Real fluids are viscous → corrections needed. Not for turbulent flow." },
+    { cat:"wrong", q:"'Surface tension increases with temperature' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Surface tension decreases with increase in temperature</span>. At critical temperature, surface tension = 0." },
+    { cat:"ar", q:"A: A needle floats on water surface. R: Density of needle material is less than water.", a:"A is true, R is <span class='correct'>FALSE</span>. Steel needle floats due to <span class='correct'>surface tension</span>, not density (steel density >> water)." }
+  ]},
+  { ch:"16-17", title:"Electric Charges and Fields", traps:[
+    { cat:"exception", q:"Electric field lines can intersect — True?", a:"<span class='correct'>Never</span>. If they intersected, there would be two directions of field at one point — impossible. Field has unique direction at every point." },
+    { cat:"confusing", q:"Gauss's law — does surface shape matter?", a:"<span class='correct'>No</span>. Any closed Gaussian surface gives the same result (∮E·dA = q_enc/ε₀) regardless of shape, as long as total enclosed charge is same." },
+    { cat:"wrong", q:"'Electric field inside a conductor is zero only when charge is at rest' — True?", a:"This is only half right. <span class='correct'>E inside conductor = 0 always in electrostatic conditions</span>. If current flows, E inside ≠ 0." },
+    { cat:"repeated", q:"Electric field due to infinite plane sheet of charge?", a:"E = <span class='correct'>σ/2ε₀</span> (single sheet). Between two parallel plates (capacitor): E = σ/ε₀ (fields add). Outside: E = 0 (fields cancel). Very frequently tested." }
+  ]},
+  { ch:"20", title:"Current Electricity", traps:[
+    { cat:"confusing", q:"EMF vs Terminal voltage — which is larger when battery is discharging?", a:"EMF > Terminal voltage during discharge. V = ε − Ir. <span class='correct'>Terminal voltage < EMF by amount Ir (voltage drop across internal resistance).</span>" },
+    { cat:"exception", q:"Ohm's law is universally applicable — True?", a:"<span class='wrong-ans'>True</span> is wrong. Ohm's law does NOT apply to: <span class='correct'>semiconductors, electrolytes, vacuum tubes, thyristors</span>. It's an empirical law for ohmic conductors." },
+    { cat:"wrong", q:"'Voltmeter should have low resistance' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Voltmeter must have <span class='correct'>very HIGH resistance</span> so it draws negligible current and doesn't disturb the circuit." },
+    { cat:"repeated", q:"In Wheatstone bridge, when is galvanometer deflection zero?", a:"When <span class='correct'>P/Q = R/S</span> (balanced bridge). No current through galvanometer. Used to find unknown resistance." }
+  ]},
+  { ch:"22", title:"Moving Charges and Magnetism", traps:[
+    { cat:"confusing", q:"Can magnetic force do work on a moving charge?", a:"<span class='correct'>No. Magnetic force is always perpendicular to velocity</span> → W = Fv cosθ = 0. Magnetic force changes direction but NOT speed of charge." },
+    { cat:"exception", q:"Time period of circular motion in magnetic field depends on speed — True?", a:"<span class='wrong-ans'>True</span> is wrong. T = 2πm/qB — <span class='correct'>independent of speed and radius</span>. This is why cyclotron works." },
+    { cat:"wrong", q:"'Parallel current-carrying wires repel each other' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Parallel currents in same direction attract</span>; opposite directions repel. Definition of Ampere based on this attraction." },
+    { cat:"repeated", q:"What is the unit of magnetic pole strength?", a:"This is conceptual trap. Magnetic monopoles don't exist. Pole strength is <span class='correct'>A·m</span>. But NEET sometimes asks for it — answer A·m." }
+  ]},
+  { ch:"25-26", title:"Wave Optics", traps:[
+    { cat:"confusing", q:"In YDSE, what happens to fringe width if screen distance is doubled?", a:"β = λD/d → fringe width <span class='correct'>doubles</span> (β ∝ D). If slit separation doubled: fringe width halves. If wavelength doubled: fringe width doubles." },
+    { cat:"exception", q:"Light can be polarized — sound also?", a:"<span class='correct'>No. Sound is longitudinal — cannot be polarized</span>. Only transverse waves (light, string waves) can be polarized." },
+    { cat:"wrong", q:"'In single-slit diffraction, all minima are equally wide' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Central maximum is twice as wide</span> as other maxima. All secondary maxima are equal, but central is double." },
+    { cat:"ar", q:"A: Diffraction is more pronounced when obstacle size ≈ wavelength. R: Sound diffracts more than light around corners.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Sound λ ≈ meters; light λ = 400-700 nm." }
+  ]},
+  { ch:"27", title:"Dual Nature of Radiation", traps:[
+    { cat:"repeated", q:"Increasing intensity in photoelectric effect — what increases?", a:"<span class='correct'>Number of photoelectrons</span> increases (more photons → more ejections). KE of individual electrons does NOT change. Frequency determines KE." },
+    { cat:"confusing", q:"Work function — is it same for all metals?", a:"<span class='correct'>No</span>. Different metals have different work functions. Caesium has lowest (most sensitive — used in photocells). Gold has highest." },
+    { cat:"exception", q:"de Broglie wavelength is significant for all particles — exception?", a:"de Broglie wavelength λ = h/mv. For <span class='correct'>macroscopic objects</span> (cricket ball), λ is negligibly small (10⁻³⁴ m) — undetectable. Significant only for microscopic particles." },
+    { cat:"wrong", q:"'Below threshold frequency, increasing intensity will cause photoelectric emission' — True?", a:"<span class='wrong-ans'>True</span> is absolutely wrong. <span class='correct'>No emission below threshold frequency regardless of intensity</span>. This disproved wave theory of light." }
+  ]},
+  { ch:"29", title:"Nuclei", traps:[
+    { cat:"confusing", q:"Half-life vs Mean life — which is larger?", a:"Mean life τ = 1/λ = T½/0.693 = 1.44 T½. <span class='correct'>Mean life > Half-life always</span>. τ = 1.44 × T½." },
+    { cat:"exception", q:"Nuclear density is same for all nuclei — True?", a:"<span class='correct'>Yes — this is a TRUE fact, not a trap</span>. Nuclear density ≈ 2.3×10¹⁷ kg/m³ for ALL nuclei (since R = R₀A^(1/3), volume ∝ A, mass ∝ A → density constant)." },
+    { cat:"wrong", q:"'Alpha particles are more penetrating than gamma rays' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Penetration: <span class='correct'>γ >> β >> α</span>. Ionizing power: α >> β >> γ. Penetration and ionization are inversely related." },
+    { cat:"repeated", q:"In β⁻ decay, what is emitted along with electron?", a:"<span class='correct'>Antineutrino (ν̄)</span> is emitted along with electron in β⁻ decay. In β⁺ decay: positron + neutrino. Trap: Students write only 'electron'." }
+  ]},
+  { ch:"30", title:"Semiconductor Electronics", traps:[
+    { cat:"confusing", q:"In n-type semiconductor, which are minority carriers?", a:"In n-type: electrons are majority, <span class='correct'>holes are minority carriers</span>. In p-type: holes majority, electrons minority. BOTH types have electrons AND holes." },
+    { cat:"exception", q:"Semiconductor conductivity increases with temperature — exception?", a:"<span class='correct'>No exception for intrinsic semiconductors</span>. But for extrinsic semiconductors at very high temperature, intrinsic behavior dominates. Not standard NEET trap." },
+    { cat:"wrong", q:"'In forward bias, depletion region widens' — True?", a:"<span class='wrong-ans'>True</span> is wrong. In forward bias, depletion region <span class='correct'>narrows/decreases</span>. In reverse bias, it widens." },
+    { cat:"repeated", q:"Common emitter transistor — what is the phase difference between input and output?", a:"<span class='correct'>180° (phase inversion)</span>. Output is inverted relative to input. This is unique to common emitter configuration." },
+    { cat:"ar", q:"A: Zener diode is used as voltage regulator. R: It operates in reverse breakdown region.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Breakdown voltage = Zener voltage; voltage remains constant across it." }
+  ]}
+],
+
+chem: [
+  { ch:"01", title:"Some Basic Concepts", traps:[
+    { cat:"confusing", q:"Molarity vs Molality — which changes with temperature?", a:"<span class='correct'>Molarity changes with temperature</span> (volume changes). Molality does not change (based on mass of solvent). Use molality for colligative properties." },
+    { cat:"exception", q:"1 mole of all gases at STP occupies 22.4 L — True?", a:"Only for <span class='correct'>ideal gases at STP (0°C, 1 atm)</span>. Real gases deviate. Note: New IUPAC STP = 0°C and 100 kPa (not 101.325 kPa), molar volume = 22.7 L." },
+    { cat:"wrong", q:"'Equivalent weight = Molar mass always' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Equivalent weight = Molar mass / n-factor. n-factor depends on the reaction type (acid-base, redox, precipitation)." },
+    { cat:"repeated", q:"What is the difference between empirical and molecular formula?", a:"Empirical = simplest ratio. Molecular = actual. CH₂O is empirical for glucose (C₆H₁₂O₆). Both can be same: H₂O is both empirical and molecular." }
+  ]},
+  { ch:"02", title:"Structure of Atom", traps:[
+    { cat:"exception", q:"Electronic configuration of Cr and Cu — exceptions?", a:"<span class='correct'>Cr: [Ar] 3d⁵ 4s¹</span> (not 3d⁴ 4s²). <span class='correct'>Cu: [Ar] 3d¹⁰ 4s¹</span> (not 3d⁹ 4s²). Half-filled and fully-filled d orbitals are extra stable." },
+    { cat:"confusing", q:"Node vs Nodal plane — what's the difference?", a:"Node: Region of zero electron probability. Radial nodes (spherical): n−l−1. Angular nodes (planes): l. Total nodes = n−1. p orbital has <span class='correct'>1 nodal plane</span> through nucleus." },
+    { cat:"wrong", q:"'Heisenberg uncertainty principle applies to all particles' — True?", a:"It applies to all particles but is <span class='correct'>significant only for microscopic particles</span>. For macroscopic objects (ball, car), uncertainty is negligibly small." },
+    { cat:"repeated", q:"Which quantum number determines shape of orbital?", a:"<span class='correct'>Azimuthal quantum number (l)</span>. l=0→s (sphere), l=1→p (dumbbell), l=2→d, l=3→f. Principal quantum number (n) determines size/energy." }
+  ]},
+  { ch:"04", title:"Chemical Bonding", traps:[
+    { cat:"exception", q:"Octet rule exceptions — name them?", a:"Electron deficient: <span class='correct'>BF₃, BCl₃, AlCl₃</span> (6 electrons). Expanded octet: <span class='correct'>PCl₅, SF₆, XeF₄</span> (10, 12 electrons). Odd electron: <span class='correct'>NO, NO₂, ClO₂</span>." },
+    { cat:"confusing", q:"Bond order 1.5 — which molecules?", a:"<span class='correct'>NO⁺: 3, NO: 2.5, NO⁻: 2</span>. O₂ bond order = 2; O₂⁺ = 2.5. F₂ bond order = 1. N₂ = 3 (strongest diatomic)." },
+    { cat:"wrong", q:"'Sigma bond is stronger than pi bond always' — True?", a:"<span class='correct'>Generally true</span> — σ has better axial overlap. But π bond in benzene (delocalized) can be different. NEET: σ > π in terms of bond energy for isolated bonds." },
+    { cat:"repeated", q:"VSEPR: Shape of SF₆, PCl₅, ClF₃ — compare?", a:"SF₆: <span class='correct'>Octahedral</span> (6 bp, 0 lp). PCl₅: <span class='correct'>Trigonal bipyramidal</span> (5 bp, 0 lp). ClF₃: <span class='correct'>T-shaped</span> (3 bp, 2 lp from trigonal bipyramidal base)." },
+    { cat:"exception", q:"Fajan's rules — which has more covalent character: LiF or LiI?", a:"<span class='correct'>LiI has more covalent character</span>. Larger anion (I⁻) is more polarizable than F⁻. Higher polarization → more covalent character." }
+  ]},
+  { ch:"07", title:"Equilibrium", traps:[
+    { cat:"confusing", q:"Le Chatelier's principle — effect of adding inert gas?", a:"At <span class='correct'>constant volume: No effect</span> (partial pressures unchanged). At <span class='correct'>constant pressure: Equilibrium shifts to more moles side</span> (total pressure maintained)." },
+    { cat:"exception", q:"Higher temperature always favors forward reaction — True?", a:"<span class='wrong-ans'>True</span> is wrong. For <span class='correct'>exothermic reactions, high temperature shifts equilibrium BACKWARD</span> (Le Chatelier). For endothermic: forward." },
+    { cat:"wrong", q:"'Kc and Kp are always equal' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Kp = Kc(RT)^Δn. <span class='correct'>Equal only when Δn = 0</span> (equal moles of gaseous reactants and products). e.g. H₂ + I₂ ⇌ 2HI (Δn=0, Kp=Kc)." },
+    { cat:"repeated", q:"Buffer solution — what is the Henderson-Hasselbalch equation?", a:"pH = pKa + log([A⁻]/[HA]). <span class='correct'>pH = pKa when [A⁻] = [HA]</span> (equal concentrations). Buffer is most effective at pH = pKa ± 1." },
+    { cat:"ar", q:"A: pH of buffer remains constant on dilution. R: The ratio [A⁻]/[HA] remains constant on dilution.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Dilution changes concentrations equally, ratio unchanged." }
+  ]},
+  { ch:"08", title:"Redox Reactions", traps:[
+    { cat:"confusing", q:"Oxidation number of S in Na₂S₂O₃ (sodium thiosulphate)?", a:"<span class='correct'>+2</span>. Trap: Students calculate +6 (like sulphate). In thiosulphate, one S is +6 and one is −2, average = +2. Or use algebra: 2x = +4 → x = +2." },
+    { cat:"exception", q:"Oxygen is always −2 in compounds — exceptions?", a:"In <span class='correct'>peroxides (H₂O₂, Na₂O₂): O = −1</span>. In <span class='correct'>OF₂: O = +2</span>. In <span class='correct'>O₂F₂: O = +1</span>. In <span class='correct'>superoxides (KO₂): O = −½</span>." },
+    { cat:"wrong", q:"'Reducing agent gets oxidized AND loses electrons — these are two different things' — True?", a:"<span class='wrong-ans'>True</span> is wrong. They are <span class='correct'>the same thing</span>. Oxidation = loss of electrons. Reducing agent is itself oxidized." },
+    { cat:"repeated", q:"Mn oxidation states — which is most stable?", a:"Mn shows +2 to +7. Most stable: <span class='correct'>+2 (Mn²⁺)</span> in acidic solution. MnO₄⁻ (+7) is a strong oxidizing agent reduced to Mn²⁺ in acidic, MnO₂ (+4) in neutral, MnO₄²⁻ (+6) in basic." }
+  ]},
+  { ch:"10", title:"The s-Block Elements", traps:[
+    { cat:"exception", q:"All alkali metals react with water to give H₂ — exception?", a:"<span class='correct'>No exception</span> — all Group 1 metals react with water, but vigor increases: Li<Na<K<Rb<Cs. Li reacts slowly, Cs explosively." },
+    { cat:"confusing", q:"Lithium resembles Magnesium (diagonal relationship) — how?", a:"Both: Form <span class='correct'>normal oxides (not peroxide/superoxide)</span>, form nitride with N₂, form carbonate (Li₂CO₃ decomposes on heating like MgCO₃), similar ionic radius and charge density." },
+    { cat:"wrong", q:"'Na₂O₂ is the oxide of sodium' — True?", a:"<span class='wrong-ans'>True</span> is misleading. Na₂O₂ is <span class='correct'>sodium peroxide</span>, not the normal oxide. Normal oxide = Na₂O. On burning in excess O₂, Na forms Na₂O₂. K forms superoxide KO₂." },
+    { cat:"repeated", q:"Hardness of water — temporary vs permanent?", a:"Temporary: Ca(HCO₃)₂, Mg(HCO₃)₂ — removed by <span class='correct'>boiling</span>. Permanent: CaSO₄, MgSO₄, CaCl₂ — removed by <span class='correct'>washing soda (Na₂CO₃)</span> or ion exchange." }
+  ]},
+  { ch:"12", title:"Organic Chemistry Basics", traps:[
+    { cat:"confusing", q:"Inductive effect vs Resonance — which is stronger?", a:"<span class='correct'>Resonance (mesomeric effect) > Inductive effect</span> in most cases. Resonance involves π electrons/lone pairs; inductive involves σ electrons. But context matters." },
+    { cat:"exception", q:"Carbocation stability: Tertiary > Secondary > Primary — exceptions?", a:"<span class='correct'>Allylic and benzylic carbocations</span> are more stable than comparable alkyl due to resonance delocalization. Allyl > 3° in some contexts." },
+    { cat:"wrong", q:"'Hyperconjugation is possible only in carbocations' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Hyperconjugation also stabilizes <span class='correct'>free radicals, carbanions, alkenes, and even in ground state molecules</span>." },
+    { cat:"repeated", q:"Which is more stable — alkyl free radical or alkyl carbanion?", a:"Order: 3°>2°>1° for both free radicals and carbocations. For carbanions: <span class='correct'>REVERSE order — methyl > 1° > 2° > 3°</span> (more substitution = more destabilizing inductive effect)." }
+  ]},
+  { ch:"13", title:"Hydrocarbons", traps:[
+    { cat:"exception", q:"Markovnikov's rule — exceptions?", a:"<span class='correct'>Peroxide effect (Kharasch effect)</span>: Addition of HBr in presence of peroxides follows Anti-Markovnikov. Free radical mechanism. Only HBr — NOT HCl or HI." },
+    { cat:"confusing", q:"Electrophilic vs Nucleophilic addition — where does each apply?", a:"Electrophilic addition: <span class='correct'>alkenes, alkynes</span> (π electrons are nucleophilic → attract electrophiles). Nucleophilic addition: <span class='correct'>aldehydes, ketones</span> (carbonyl carbon is electrophilic)." },
+    { cat:"wrong", q:"'Benzene undergoes addition reactions easily' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Benzene preferentially undergoes <span class='correct'>electrophilic substitution</span> to maintain aromaticity. Addition possible under forcing conditions only." },
+    { cat:"ar", q:"A: Acetylene is more acidic than ethylene. R: sp carbon is more electronegative than sp².", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> More s-character → more electronegative → bond more polar → more acidic." }
+  ]},
+  { ch:"14", title:"Environmental Chemistry", traps:[
+    { cat:"confusing", q:"Good ozone vs Bad ozone — where is each?", a:"Good: <span class='correct'>Stratosphere (15-50 km)</span> — shields UV. Bad: <span class='correct'>Troposphere (ground level)</span> — pollutant, damages lungs and plants (photochemical smog component)." },
+    { cat:"exception", q:"All greenhouse gases trap heat — is CO₂ the most potent?", a:"<span class='wrong-ans'>Yes</span> is wrong. <span class='correct'>Methane (CH₄) is 25× more potent</span> than CO₂ as greenhouse gas. N₂O is ~300× more potent. CFCs are ~1000× more. CO₂ is most abundant, not most potent." },
+    { cat:"wrong", q:"'Acid rain has pH below 7' — True?", a:"Oversimplification trap. Normal rain is already slightly acidic (pH ≈ 5.6 due to dissolved CO₂). <span class='correct'>Acid rain has pH below 5.6</span>." }
+  ]},
+  { ch:"15", title:"Solid State", traps:[
+    { cat:"confusing", q:"BCC vs FCC — which has higher packing efficiency?", a:"FCC (Face-centred cubic): <span class='correct'>74%</span>. BCC: <span class='correct'>68%</span>. Simple cubic: 52%. FCC = HCP (both 74%). NEET trap: Students think BCC is more efficient." },
+    { cat:"exception", q:"All ionic solids are hard and brittle — exception?", a:"Generally true, but not all ionic compounds are hard. <span class='correct'>Silver iodide (AgI) is relatively soft</span>. Also, metals are hard but ductile (not ionic)." },
+    { cat:"wrong", q:"'Schottky defect increases density of crystal' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Schottky defect = <span class='correct'>equal cation + anion vacancies → density DECREASES</span>. Frenkel defect: No change in density (ion moves to interstitial, not removed)." },
+    { cat:"repeated", q:"Number of atoms per unit cell: SC, BCC, FCC?", a:"SC = <span class='correct'>1</span>. BCC = <span class='correct'>2</span>. FCC = <span class='correct'>4</span>. NaCl unit cell = 4 formula units. Very frequently asked." }
+  ]},
+  { ch:"16", title:"Solutions", traps:[
+    { cat:"confusing", q:"Osmotic pressure vs other colligative properties — which is most sensitive?", a:"<span class='correct'>Osmotic pressure</span> is most sensitive (detects very dilute solutions). Used to measure molar mass of polymers and biological macromolecules." },
+    { cat:"exception", q:"van't Hoff factor i > 1 always for electrolytes — exception?", a:"For electrolytes that <span class='correct'>associate in solution</span> (like carboxylic acids in benzene), i < 1. i > 1 for dissociation; i < 1 for association." },
+    { cat:"wrong", q:"'Boiling point elevation is directly proportional to molarity' — True?", a:"<span class='wrong-ans'>True</span> is wrong. ΔTb = Kb × <span class='correct'>molality</span> (not molarity). Molality is temperature-independent." },
+    { cat:"repeated", q:"Which colligative property is used in reverse osmosis?", a:"<span class='correct'>Osmotic pressure</span>. In RO, pressure greater than osmotic pressure is applied to force solvent through semi-permeable membrane. Used in water purification." }
+  ]},
+  { ch:"17", title:"Electrochemistry", traps:[
+    { cat:"confusing", q:"In electrolytic cell — which is anode, which is cathode?", a:"Electrolytic cell: <span class='correct'>Anode = positive</span> (connected to +ve terminal), oxidation occurs. Cathode = negative, reduction occurs. Opposite sign convention vs galvanic cell!" },
+    { cat:"exception", q:"EMF of a cell can be negative — what does that mean?", a:"<span class='correct'>Negative EMF means reaction is non-spontaneous</span> as written. Reverse the reaction for spontaneous direction. ΔG = −nFE; negative E → positive ΔG → non-spontaneous." },
+    { cat:"wrong", q:"'Strong electrolytes are fully ionized at all concentrations' — True?", a:"<span class='wrong-ans'>True</span> is wrong. At <span class='correct'>high concentrations, even strong electrolytes show incomplete dissociation</span> due to interionic interactions." },
+    { cat:"repeated", q:"At cathode in electrolysis of brine (NaCl solution), what is produced?", a:"<span class='correct'>H₂ gas at cathode</span>. Water is preferentially reduced. At anode: Cl₂ gas. Products: NaOH + Cl₂ + H₂ (chlor-alkali process)." }
+  ]},
+  { ch:"18", title:"Chemical Kinetics", traps:[
+    { cat:"confusing", q:"Order vs Molecularity — can they be fractional?", a:"Order: <span class='correct'>Can be fractional, zero, or negative</span> (experimental). Molecularity: <span class='correct'>Always whole number (1, 2, 3)</span> — theoretically defined. Never fractional or zero." },
+    { cat:"exception", q:"Rate constant k changes with concentration — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>k is independent of concentration</span>. k depends only on temperature (Arrhenius equation). This is a fundamental trap." },
+    { cat:"wrong", q:"'Zero order reaction rate depends on concentration' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Zero order: <span class='correct'>Rate = k (constant)</span>. Rate is INDEPENDENT of concentration. Half-life = [A]₀/2k (depends on initial concentration — another trap)." },
+    { cat:"repeated", q:"Pseudo-first order reaction — example and condition?", a:"<span class='correct'>Acid hydrolysis of ester</span>: RCOOR' + H₂O → RCOOH + R'OH. Water is in excess → effectively constant → 2nd order becomes pseudo-1st order." },
+    { cat:"ar", q:"A: Catalyst increases rate of reaction. R: It decreases activation energy.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Catalyst provides alternative pathway with lower Ea. Doesn't change ΔG or K." }
+  ]},
+  { ch:"19", title:"Surface Chemistry", traps:[
+    { cat:"confusing", q:"Physisorption vs Chemisorption — which is reversible?", a:"Physisorption: <span class='correct'>Reversible</span>, multilayer, low Ea, decreases with temperature. Chemisorption: <span class='correct'>Irreversible</span>, monolayer, high Ea, initially increases then decreases with T." },
+    { cat:"exception", q:"Adsorption always decreases with temperature — True?", a:"<span class='wrong-ans'>True</span> for physisorption only. <span class='correct'>Chemisorption first increases (kinetics) then decreases</span> with temperature — trap." },
+    { cat:"wrong", q:"'Lyophilic colloids are less stable than lyophobic' — True?", a:"<span class='wrong-ans'>True</span> is wrong. <span class='correct'>Lyophilic (solvent-loving) colloids are more stable</span>. They don't need stabilizer; solvent interaction provides stability." },
+    { cat:"repeated", q:"Hardy-Schulze rule — what determines coagulating power of electrolyte?", a:"<span class='correct'>Higher the charge on the ion opposite to colloidal particle, more effective the coagulation.</span> Al³⁺ > Ca²⁺ > Na⁺ for negative sol. Coagulating value is minimum concentration needed." }
+  ]},
+  { ch:"23", title:"Coordination Compounds", traps:[
+    { cat:"confusing", q:"Spectrochemical series — strong vs weak field?", a:"Weak field (low Δ): <span class='correct'>I⁻ < Br⁻ < Cl⁻ < F⁻ < OH⁻ < H₂O</span>. Strong field (high Δ): <span class='correct'>NH₃ < en < CN⁻ < CO</span>. CO is strongest field ligand." },
+    { cat:"exception", q:"All strong field ligands give low-spin complexes — exception?", a:"F⁻ is a weak-field ligand but <span class='correct'>small size</span> sometimes causes unusual behavior. Also, <span class='correct'>d⁰ and d¹⁰</span> configurations have no spin-state distinction — high/low spin not applicable." },
+    { cat:"wrong", q:"'EAN rule applies to all coordination compounds' — True?", a:"<span class='wrong-ans'>True</span> is wrong. EAN rule has <span class='correct'>many exceptions</span>. It is a useful guide for organometallic compounds but not universally applicable to simple complexes." },
+    { cat:"repeated", q:"IUPAC name of [Co(NH₃)₆]³⁺?", a:"<span class='correct'>Hexaamminecobalt(III) ion</span>. Rule: Ligands alphabetically (a before b...), metal name, oxidation state. Anionic complex ends in '-ate' (e.g. hexacyanoferrate(II))." }
+  ]},
+  { ch:"24", title:"Haloalkanes and Haloarenes", traps:[
+    { cat:"confusing", q:"SN1 vs SN2 — which substrate favors which?", a:"SN2: <span class='correct'>Primary substrates</span> (less steric hindrance, backside attack). SN1: <span class='correct'>Tertiary substrates</span> (stable carbocation). Secondary: both possible." },
+    { cat:"exception", q:"SN2 always gives complete inversion — exception?", a:"<span class='correct'>No exception for pure SN2</span> — always complete inversion (Walden inversion). If racemization occurs, it means SN1 is operating." },
+    { cat:"wrong", q:"'Vinyl halides undergo SN2 easily' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Vinyl halides and aryl halides are <span class='correct'>very resistant to nucleophilic substitution</span> due to resonance strengthening of C-X bond and sp² carbon." },
+    { cat:"repeated", q:"Which halide reacts fastest in SN2: RF, RCl, RBr, RI?", a:"<span class='correct'>RI > RBr > RCl > RF</span>. Larger halogen = weaker C-X bond = better leaving group. Opposite for SN2 rate with different nucleophiles." }
+  ]},
+  { ch:"25", title:"Alcohols, Phenols and Ethers", traps:[
+    { cat:"confusing", q:"Alcohols vs Phenols — which is more acidic?", a:"<span class='correct'>Phenol is more acidic</span> than alcohol. Phenoxide ion is stabilized by resonance (delocalization into ring). Water is more acidic than alcohol but less acidic than phenol." },
+    { cat:"exception", q:"Dehydration of alcohol always gives alkene at 443K — exception?", a:"Primary alcohol at moderate temp gives <span class='correct'>ether first</span> (413K, intermolecular). Higher temperature (443K) gives alkene (intramolecular). Trap: Assuming 443K always gives alkene for all alcohols." },
+    { cat:"wrong", q:"'Ethers are completely unreactive' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Ethers are cleaved by <span class='correct'>HI (strongest acid, best nucleophile)</span>: ROC + HI → RI + ROH. Resistant to most reagents, but not all." },
+    { cat:"ar", q:"A: Phenol turns pink on exposure to air. R: It gets oxidized to form coloured quinoid compounds.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> This is why phenol must be stored away from light/air." }
+  ]},
+  { ch:"26", title:"Aldehydes, Ketones and Carboxylic Acids", traps:[
+    { cat:"confusing", q:"Aldehydes give Fehling's test positive but ketones do not — exception?", a:"<span class='correct'>Exception: HCHO (formaldehyde) also gives Fehling's positive</span>. More relevantly: <span class='correct'>Benzaldehyde does NOT give Fehling's positive</span> (aromatic aldehyde fails this test)." },
+    { cat:"wrong", q:"'Iodoform test is positive for all ketones' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Iodoform test is positive only for <span class='correct'>methyl ketones (CH₃CO−)</span> and compounds oxidizable to methyl ketone (ethanol, secondary alcohols with CH₃CHOH group)." },
+    { cat:"repeated", q:"What is the product of Cannizzaro reaction?", a:"Aldehydes WITHOUT α-H (like HCHO, PhCHO) undergo Cannizzaro in NaOH: one molecule oxidized to <span class='correct'>carboxylate (acid)</span>, one reduced to <span class='correct'>alcohol</span>. Cross-Cannizzaro between HCHO and another aldehyde also possible." },
+    { cat:"exception", q:"Carboxylic acids are stronger than phenols — exception?", a:"Generally true. But some <span class='correct'>heavily electron-withdrawing substituted phenols</span> (picric acid = 2,4,6-trinitrophenol) are as strong as carboxylic acids." },
+    { cat:"ar", q:"A: Formaldehyde does not undergo aldol condensation. R: It lacks α-hydrogen atoms.", a:"<span class='correct'>Both A and R true, R correctly explains A.</span> Aldol condensation requires α-H. HCHO has no α-C at all." }
+  ]},
+  { ch:"27", title:"Amines", traps:[
+    { cat:"confusing", q:"Basicity of amines in water: 2° > 1° > 3° — why does 3° come last?", a:"In water, <span class='correct'>3° amines have no N-H bonds → cannot form H-bonds with water → poor solvation of cation</span>. Less solvation = less stabilized conjugate acid = lower basicity." },
+    { cat:"exception", q:"Aniline is weaker base than ammonia — why?", a:"Lone pair of N in aniline is <span class='correct'>delocalized into benzene ring</span> (resonance) → less available for protonation → less basic. Substituents change basicity: p-NO₂ aniline < aniline < p-CH₃ aniline." },
+    { cat:"wrong", q:"'Carbylamine reaction is given by all amines' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Carbylamine (isocyanide) reaction is given <span class='correct'>only by primary amines (both aliphatic and aromatic)</span>. 2° and 3° amines do not give this." },
+    { cat:"repeated", q:"Diazonium salt formation — what are the conditions?", a:"<span class='correct'>Primary aromatic amine + NaNO₂ + HCl + 0–5°C</span>. Temperature must be maintained low to prevent decomposition. Aliphatic diazonium salts are unstable; only aryl diazonium salts are stable enough to use." }
+  ]},
+  { ch:"28", title:"Biomolecules", traps:[
+    { cat:"confusing", q:"Reducing vs Non-reducing sugars — how to identify?", a:"Reducing: Have free <span class='correct'>aldehyde or ketone group</span>; give Fehling's/Tollens' positive. Non-reducing: No free carbonyl; e.g. <span class='correct'>sucrose (C1-C2 glycosidic bond locks both anomeric carbons)</span>." },
+    { cat:"exception", q:"All disaccharides are reducing sugars — exception?", a:"<span class='correct'>Sucrose is non-reducing</span>. Lactose and maltose are reducing. Trehalose is also non-reducing. The anomeric carbon must be free for reducing action." },
+    { cat:"wrong", q:"'Denaturation of protein destroys its primary structure' — True?", a:"<span class='wrong-ans'>True</span> is wrong. Denaturation disrupts <span class='correct'>secondary, tertiary, quaternary structures</span>. Primary structure (peptide bonds) remains intact." },
+    { cat:"repeated", q:"What type of bond connects nucleotides in DNA?", a:"<span class='correct'>3',5'-phosphodiester bond</span>. Between 3'-OH of one deoxyribose and 5'-phosphate of next. Complementary strands held by H-bonds (A=T: 2 H-bonds; G≡C: 3 H-bonds)." }
+  ]},
+  { ch:"09", title:"Hydrogen and its Compounds", traps:[
+    { cat:"exception", q:"H₂O₂ is only an oxidizing agent — True?", a:"<span class='wrong-ans'>True</span> is wrong. H₂O₂ is both oxidizing AND <span class='correct'>reducing agent</span>. Reducing: H₂O₂ + 2KMnO₄ + H₂SO₄ → K₂SO₄ + 2MnSO₄ + 2H₂O + O₂. Oxidizing: towards I⁻, Fe²⁺ etc." },
+    { cat:"confusing", q:"Volume strength of H₂O₂ — what does '10 volume' mean?", a:"10 volume H₂O₂: <span class='correct'>1 L of this solution gives 10 L of O₂ at STP</span>. Normality = Volume strength / 5.6. Molarity = Volume strength / 11.2." },
+    { cat:"wrong", q:"'Heavy water (D₂O) retards nuclear reactions' — True?", a:"<span class='wrong-ans'>True</span> is wrong. D₂O is used as a <span class='correct'>moderator to SLOW DOWN (not retard) neutrons</span> so they can cause more fission in nuclear reactors." }
+  ]}
+]
+};
+
+let currentTab = 'bio';
+let currentCat = 'all';
+
+function countTraps(){
+  let bio=0, phy=0, chem=0;
+  TRAPS.bio.forEach(ch => bio += ch.traps.length);
+  TRAPS.phy.forEach(ch => phy += ch.traps.length);
+  TRAPS.chem.forEach(ch => chem += ch.traps.length);
+  document.getElementById('bio-count').textContent = bio;
+  document.getElementById('phy-count').textContent = phy;
+  document.getElementById('chem-count').textContent = chem;
+}
+
+function switchTab(tab, btn){
+  currentTab = tab;
+  document.querySelectorAll('.tab').forEach(t => t.className='tab');
+  btn.classList.add('active-'+tab);
+  document.getElementById('searchInput').value='';
+  render();
+}
+
+function setCat(cat, btn){
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => {
+    const cls = b.className.split(' ').filter(c => c==='cat-btn').join(' ');
+    b.className = 'cat-btn';
+  });
+  btn.className = 'cat-btn on-'+cat;
+  render();
+}
+
+function render(){
+  const list = document.getElementById('trapList');
+  const query = document.getElementById('searchInput').value.toLowerCase();
+  const data = TRAPS[currentTab];
+  let html = '';
+
+  data.forEach((chapter, ci) => {
+    let filtered = chapter.traps.filter(t => {
+      if(currentCat !== 'all' && t.cat !== currentCat) return false;
+      if(query){
+        const text = (chapter.title + ' ' + t.q + ' ' + t.a).toLowerCase();
+        if(!text.includes(query)) return false;
+      }
+      return true;
+    });
+
+    if(filtered.length === 0) return;
+
+    const id = 'ch_'+currentTab+'_'+ci;
+    html += `
+    <div class="ch-card" id="${id}">
+      <div class="ch-header" onclick="toggleCh('${id}')">
+        <span class="ch-num ${currentTab}-num">Ch ${chapter.ch}</span>
+        <div class="ch-meta">
+          <div class="ch-title">${chapter.title}</div>
+          <div class="ch-count">${filtered.length} trap${filtered.length>1?'s':''}</div>
+        </div>
+        <span class="expand-icon">▼</span>
+      </div>
+      <div class="ch-body">
+        <div class="ch-content">
+          ${filtered.map(t => `
+          <div class="trap-item ${t.cat}">
+            <span class="trap-tag tag-${t.cat}">${tagLabel(t.cat)}</span>
+            <div class="trap-q">${t.q}</div>
+            <div class="trap-a">${t.a}</div>
+          </div>`).join('')}
+        </div>
+      </div>
+    </div>`;
+  });
+
+  if(!html) html = '<div class="empty">No traps found for this filter 🔍</div>';
+  list.innerHTML = html;
+}
+
+function tagLabel(cat){
+  const m = {exception:'⚠️ EXCEPTION', wrong:'❌ WRONG STMT', confusing:'😵 CONFUSING', ar:'🔗 A/R TRAP', repeated:'🔁 REPEATED'};
+  return m[cat] || cat.toUpperCase();
+}
+
+function toggleCh(id){
+  const el = document.getElementById(id);
+  el.classList.toggle('open');
+  el.classList.toggle('has-open', el.classList.contains('open'));
+}
+
+countTraps();
+render();
+</script>
+</body>
+</html>
